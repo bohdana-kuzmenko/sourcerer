@@ -12,6 +12,7 @@ from sqlalchemy_utils.types.encrypted.encrypted_type import EncryptedType
 class SourceProvidersEnum(str, enum.Enum):
     blobby = "BLOBBY"
     apple_s3 = "APPLE_S3"
+    mcqueen = "MCQUEEN"
 
 
 class User(Base):

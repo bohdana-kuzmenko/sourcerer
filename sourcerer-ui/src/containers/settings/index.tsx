@@ -130,6 +130,15 @@ export default function SettingsPage() {
                                 <label>Endpoint url</label>
                                 <input placeholder='AWS Secret Access Key'/>
                             </Form.Field>}
+                        {['MCQUEEN'].indexOf(provider) > -1 &&
+                            <Form.Field
+                                onChange={(event: any) => setFormData({
+                                    ...formData,
+                                    region: event.target.value,
+                                })}>
+                                <label>Region</label>
+                                <input placeholder='Region'/>
+                            </Form.Field>}
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>
