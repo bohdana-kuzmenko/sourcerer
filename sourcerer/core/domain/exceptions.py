@@ -1,0 +1,2 @@
+class SourcerBaseException(Exception):
+    pass
