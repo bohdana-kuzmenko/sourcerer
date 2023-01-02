@@ -183,11 +183,9 @@ const StorageContent = (props: any) => {
                         <Image src={previewContent}/>
                     )}
                     {!keyPreviewLoading && previewContentType === 'json' && (
-                        // <Segment>
-                        <div>
-                            <pre>{previewContent}</pre>
-                            </div>
-                        // </Segment>
+                        <Segment>
+                            {previewContent}
+                        </Segment>
                     )}
                     {keyPreviewLoading && (
                         <Segment>
