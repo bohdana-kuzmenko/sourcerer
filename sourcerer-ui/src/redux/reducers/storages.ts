@@ -110,6 +110,7 @@ export default function storagesReducer(state = initialState, action: any) {
         case GET_STORAGES_PERMISSIONS_START: {
             return {
                 ...state,
+                activeStoragePermissions: {},
                 loading: true
 
             }
