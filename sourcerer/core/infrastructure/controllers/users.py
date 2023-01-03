@@ -6,7 +6,7 @@ class UsersController:
     def __init__(self, service: BaseUsersService):
         self.service = service
 
-    def create(self, email, password, first_name, last_name, *args, **kwargs):
+    def create(self, email, password, first_name, last_name):
         user = PydanticUser.parse_obj(
             {
                 "email": email,
