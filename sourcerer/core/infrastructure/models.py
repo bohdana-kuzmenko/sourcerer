@@ -28,8 +28,8 @@ class SourceCredentials(Base):
     __tablename__ = "source"
     id = Column(Integer, primary_key=True)
     provider = Column(Enum(SourceProvidersEnum), nullable=False)
-    credentials = Column(String, nullable=False)  # ToDo should be encrypted
-    # credentials = Column( EncryptedType(String, encryption_key), nullable=False)  # ToDo should be encrypted
+    # credentials = Column(String, nullable=False)  # ToDo should be encrypted
+    credentials = Column(EncryptedType(String, encryption_key), nullable=False)  # ToDo should be encrypted
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

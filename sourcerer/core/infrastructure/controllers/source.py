@@ -27,7 +27,7 @@ class SourceController:
         for source in sources:
             try:
                 remote_service = RemoteSourcesRegistry().get(source.provider)(
-                    source.credentials
+                    source.credentials.decode("utf-8")
                 )
             except BLOBBYConfigurationError:
                 print('BLOBBYConfigurationError')
@@ -38,35 +38,35 @@ class SourceController:
     def list_source_content(self, source_id: int, bucket: str, prefix=None):
         source = self.service.get(source_id)
         remote_service = RemoteSourcesRegistry().get(source.provider)(
-            source.credentials
+            source.credentials.decode("utf-8")
         )
         return remote_service.list_storage_items(bucket, prefix)
 
     def get_storage_permissions(self, source_id, bucket):
         source = self.service.get(source_id)
         remote_service = RemoteSourcesRegistry().get(source.provider)(
-            source.credentials
+            source.credentials.decode("utf-8")
         )
         return remote_service.get_storage_permissions(bucket)
 
     def get_storage_metadata(self, source_id, bucket):
         source = self.service.get(source_id)
         remote_service = RemoteSourcesRegistry().get(source.provider)(
-            source.credentials
+            source.credentials.decode("utf-8")
         )
         return remote_service.get_storage_metadata(bucket)
 
     def get_download_url(self, source_id, bucket, key):
         source = self.service.get(source_id)
         remote_service = RemoteSourcesRegistry().get(source.provider)(
-            source.credentials
+            source.credentials.decode("utf-8")
         )
         return remote_service.get_download_url(bucket, key)
 
     def preview_data(self, source_id, bucket, key):
         source = self.service.get(source_id)
         remote_service = RemoteSourcesRegistry().get(source.provider)(
-            source.credentials
+            source.credentials.decode("utf-8")
         )
         return remote_service.read_storage_item(bucket, key)
 
