@@ -4,6 +4,18 @@ from sourcerer.core.infrastructure.models import PydanticSourceCredentials, Pyda
 from sourcerer.core.infrastructure.services.locals.source import RegisteredSourcesService
 
 
+class BlobbyConfigurationErrorHandler:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_val:
+            print(exc_type)
+            print(exc_val)
+            print(exc_tb)
+        return True
+
+
 class SourceController:
     def __init__(self, service: RegisteredSourcesService):
         self.service = service
@@ -25,14 +37,12 @@ class SourceController:
 
         result = []
         for source in sources:
-            try:
+            with BlobbyConfigurationErrorHandler():
                 remote_service = RemoteSourcesRegistry().get(source.provider)(
                     source.credentials.decode("utf-8")
                 )
-            except BLOBBYConfigurationError:
-                print('BLOBBYConfigurationError')
-            else:
                 result.extend([{**i, "registration_id": source.id} for i in remote_service.list_storages()])
+
         return result
 
     def list_source_content(self, source_id: int, bucket: str, prefix=None):
