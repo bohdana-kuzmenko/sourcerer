@@ -42,4 +42,23 @@ export class UsersApi {
             dispatch({type: USER_AUTHORISE_FAILED})
         });
     }
+    signin = (dispatch: any, firstName: string, lastName: string, email: string, password: string, callback: VoidFunction) => {
+        dispatch({type: USER_AUTHORISE_START})
+        client.post("http://127.0.0.1:8000/api/v1/auth/signin",
+            {email: email, password: password, first_name: firstName, last_name: lastName}
+        ).then((data) => {
+            window.localStorage.setItem("sourcer_token", data.access_token)
+            dispatch({
+                type: USER_AUTHORISE_SUCCESS,
+                payload: {
+                    email: data.email,
+                    username: data.user,
+                    token: data.access_token,
+                }
+            })
+            callback();
+        }).catch(() => {
+            dispatch({type: USER_AUTHORISE_FAILED})
+        });
+    }
 }

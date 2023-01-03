@@ -16,8 +16,11 @@ function SignInPage() {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
         let formData = new FormData(event.currentTarget);
-        let username = formData.get("username") as string;
-        auth.signin(dispatch, username, () => {
+        let firstName = formData.get("firstname") as string;
+        let lastName = formData.get("lastname") as string;
+        let email = formData.get("email") as string;
+        let password = formData.get("password") as string;
+        auth.signin(dispatch, firstName, lastName, email, password, () => {
             navigate('/storages', {replace: true});
         });
     }
@@ -44,24 +47,19 @@ function SignInPage() {
                                 Registration
                             </Header>
                             <Segment stacked attached>
-                                <Form.Input fluid icon='user' iconPosition='left' placeholder='E-mail'/>
-                                <Form.Input fluid icon='user' iconPosition='left' placeholder='Name'/>
-                                <Form.Input fluid icon='user' iconPosition='left' placeholder='Phone number'/>
+                                <Form.Input fluid icon='user' name='firstname' iconPosition='left' placeholder='First Name'/>
+                                <Form.Input fluid icon='user' name='lastname' iconPosition='left' placeholder='Last Name'/>
+                                <Form.Input fluid icon='user' name='email' iconPosition='left' placeholder='E-mail'/>
                                 <Form.Input
                                     fluid
                                     icon='lock'
+                                    name='password'
                                     iconPosition='left'
                                     placeholder='Password'
                                     type='password'
-                                /><Form.Input
-                                fluid
-                                icon='lock'
-                                iconPosition='left'
-                                placeholder='Repeat Password'
-                                type='password'
-                            />
+                                />
                                 <Button color='orange' type="submit" fluid size='large'>
-                                    Login
+                                    SignIn
                                 </Button>
                             </Segment>
                         </Form>
@@ -72,4 +70,5 @@ function SignInPage() {
 
     );
 }
+
 export default SignInPage

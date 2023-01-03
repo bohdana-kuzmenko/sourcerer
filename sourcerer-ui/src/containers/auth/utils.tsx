@@ -13,7 +13,7 @@ interface AuthContextType {
     user: any;
     get_current_user: (dispatch: any, user: any) => void;
     login: (dispatch: any, username: string, password: string, callback: VoidFunction) => void;
-    signin: (dispatch: any, user: string, callback: VoidFunction) => void;
+    signin: (dispatch: any, firstName: string, lastName: string, email: string, password: string,  callback: VoidFunction) => void;
     signout: (callback: VoidFunction) => void;
 }
 
@@ -31,8 +31,8 @@ export function AuthProvider({children}: { children: React.ReactNode }) {
     let get_current_user = (dispatch: any, user: any) => {
         (new UsersApi()).getCurrentUser(dispatch, user)
     }
-    let signin = (dispatch: any, newUser: string, callback: VoidFunction) => {
-
+    let signin = (dispatch: any, firstName: string, lastName: string, email: string, password: string, callback: VoidFunction) => {
+        (new UsersApi()).signin(dispatch, firstName, lastName, email, password, callback)
     };
 
     let signout = (callback: VoidFunction) => {};

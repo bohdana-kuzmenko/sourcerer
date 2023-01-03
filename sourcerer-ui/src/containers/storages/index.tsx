@@ -154,11 +154,6 @@ const StorageContent = (props: any) => {
                                 <Table.Cell collapsing>
                                     <Dropdown closeOnBlur item pointing={"top right"} icon='ellipsis vertical'>
                                         <Dropdown.Menu>
-                                            {/*<ModalExampleContentImage open={open} previewContent={previewContent}>*/}
-                                            <Dropdown.Item
-                                                onClick={() => onPreviewOpen(file.key)}>Preview
-                                            </Dropdown.Item>
-                                            {/*</ModalExampleContentImage>*/}
                                             <Dropdown.Item
                                                 onClick={() => onDownloadKey(file.key)}>Download</Dropdown.Item>
                                             <Dropdown.Item>Share</Dropdown.Item>
