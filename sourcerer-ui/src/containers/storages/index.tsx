@@ -9,12 +9,13 @@ import {
     Image,
     Icon,
     Menu, Modal,
-    Table, Loader, Segment
+    Table, Loader, Segment, Message
 } from "semantic-ui-react";
 import {AuthStatus} from "../auth/utils";
 import React, {useState} from "react";
 import './index.css';
 import {StoragesApi} from "../../api/storages-api";
+import {useNavigate} from "react-router-dom";
 
 const selectStorages = (state: any) => state.storages
 
@@ -198,6 +199,7 @@ export default function StoragesPage() {
     const dispatch = useDispatch();
     let storages = useSelector(selectStorages);
     let storagesList = storages.sortedItems;
+    let noItemsReceived = storages.noItemsReceived;
     let path = storages.path;
     let storageContent = storages.activeStorageContent;
     let storagePermissions = storages.activeStoragePermissions;
@@ -244,14 +246,15 @@ export default function StoragesPage() {
     }
 
 
-    if (storagesList.length === 0) {
+    if (storagesList.length === 0 && !noItemsReceived) {
         storagesApi.listStorages(dispatch, storages);
     } else {
-        if (activeStorage === "") {
+        if (activeStorage === "" && storagesList.length > 0) {
             selectStorage(storagesList[0].names[0])
         }
     }
 
+    let navigate = useNavigate();
 
     return (
         <>
@@ -262,6 +265,19 @@ export default function StoragesPage() {
 
                 </Container>
             </Menu>
+            {
+                noItemsReceived && (
+                    <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
+                        <Grid.Column style={{maxWidth: 450}}>
+                            <Message>
+                                No storages available. ? <a className={"pointer"} onClick={()=>navigate('/settings')}>Add new credentials</a>
+                            </Message>
+                        </Grid.Column>
+                    </Grid>
+                )
+
+
+            }
             <Grid columns={2} style={{height: '100%', padding: '14px', paddingTop: '70px'}}>
                 <Grid.Column width={2} style={{height: '100%', overflowY: 'scroll'}}>
                     {

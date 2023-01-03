@@ -32,3 +32,8 @@
     -webkit-user-select: none;
     -ms-user-select: none;
 }
+
+
+.pointer:hover {
+    cursor: pointer;
+}

@@ -14,6 +14,7 @@ import {
 
 export const initialState = {
     items: [],
+    noItemsReceived: false,
     sortedItems: [],
     loading: false,
     storagesLoading: false,
@@ -74,6 +75,7 @@ export default function storagesReducer(state = initialState, action: any) {
                 loading: false,
                 items: action.payload.items,
                 sortedItems: groupNames(action.payload.items).sort(dynamicSort("letter")),
+                noItemsReceived: action.payload.items.length === 0,
             }
         }
         case GET_STORAGES_FAILED: {
