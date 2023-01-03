@@ -6,8 +6,7 @@ export class UsersApi {
     getCurrentUser = (dispatch: any, user: any) => {
         if (!user.loading) {
             dispatch({type: USER_AUTHORISE_START})
-            client.get("http://127.0.0.1:8000/api/v1/auth/me",
-                {headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')}}
+            client.get("http://127.0.0.1:8000/api/v1/auth/me"
             ).then((data) => {
                 dispatch({
                     type: USER_AUTHORISE_SUCCESS,

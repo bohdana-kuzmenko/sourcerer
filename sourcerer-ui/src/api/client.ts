@@ -28,9 +28,13 @@ export async function client(endpoint: string, {body, ...customConfig}: any = {}
 }
 
 client.get = function (endpoint: string, customConfig = {}) {
-    return client(endpoint, {...customConfig, method: 'GET'})
+    return client(endpoint, {
+        headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
+        ...customConfig, method: 'GET'})
 }
 
 client.post = function (endpoint: string, body: any, customConfig = {}) {
-    return client(endpoint, {...customConfig, body})
+    return client(endpoint, {
+        headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
+        ...customConfig, body})
 }

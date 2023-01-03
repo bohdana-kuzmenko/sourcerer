@@ -19,8 +19,7 @@ export class StoragesApi {
     listStorages = (dispatch: any, storages: any) => {
         if (!storages.loading) {
             dispatch({type: GET_STORAGES_START})
-            client.get("http://127.0.0.1:8000/api/v1/storages",
-                {headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')}}
+            client.get("http://127.0.0.1:8000/api/v1/storages"
             ).then((data) => {
                 dispatch({
                     type: GET_STORAGES_SUCCESS,
@@ -38,10 +37,7 @@ export class StoragesApi {
         dispatch({type: GET_STORAGES_CONTENT_START})
 
         const params = new URLSearchParams({path: path});
-        client.get(`http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}?`+params,
-            {
-                headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')}
-            }
+        client.get(`http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}?`+params
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_CONTENT_SUCCESS,
@@ -51,18 +47,13 @@ export class StoragesApi {
                 }
             })
         }).catch((ex) => {
-            console.log("error")
-            console.log(ex)
             dispatch({type: GET_STORAGES_CONTENT_FAILED})
         });
     };
     getStoragePermissions = (dispatch: any, registrationId: string, storageName: string) => {
         dispatch({type: GET_STORAGES_PERMISSIONS_START})
 
-        client.get(`http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}/permissions`,
-            {
-                headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')}
-            }
+        client.get(`http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}/permissions`
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_PERMISSIONS_SUCCESS,

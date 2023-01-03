@@ -13,7 +13,6 @@ export class SettingsApi {
         if (!loading) {
             dispatch({type: GET_REGISTERED_CREDENTIALS_START})
             client.get("http://127.0.0.1:8000/api/v1/registrations",
-                {headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')}}
             ).then((data) => {
                 dispatch({
                     type: GET_REGISTERED_CREDENTIALS_SUCCESS,
@@ -32,22 +31,12 @@ export class SettingsApi {
 
         await client.post("http://127.0.0.1:8000/api/v1/registrations",
             credentials,
-            {headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')}}
         ).then((data) => {
             console.log(data)
         }).catch(() => {
             dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
         });
 
-
-        // dispatch({type: GET_KEY_PREVIEW_START})
-        // const url = `http://127.0.0.1:8000/api/v1/registrations`
-        // const request = new XMLHttpRequest();
-        // request.open('POST', url, false);  // `false` makes the request synchronous
-        // request.send(credentials);
-        // let result = request.responseText
-        // dispatch({type: GET_KEY_PREVIEW_SUCCESS})
-        // return result
     };
 
 }
