@@ -31,7 +31,7 @@ export class SettingsApi {
         await client.post("http://127.0.0.1:8000/api/v1/registrations",
             credentials,
         ).then((data) => {
-            console.log(data)
+
         }).catch(() => {
             dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
         });
@@ -40,7 +40,6 @@ export class SettingsApi {
     activateRegistration = async (dispatch: any, id: any) => {
         await client.get(`http://127.0.0.1:8000/api/v1/registrations/${id}/activate`,
         ).then((data) => {
-            console.log(data)
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {
             dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
