@@ -1,7 +1,4 @@
-import time
-
 from fastapi import Depends
-from starlette.responses import RedirectResponse
 
 from sourcerer.core.infrastructure.models import PydanticUser
 from sourcerer.frameworks.fastapi.v1.routers.base import V1APIRouter
@@ -24,7 +21,6 @@ def storages(
     Get list of available storages
     :return:
     """
-    time.sleep(600)
     return source_controller.list_sources(None, user)
 
 

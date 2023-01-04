@@ -1,5 +1,5 @@
 import {useDispatch, useSelector} from "react-redux";
-import { Container, Grid, Menu } from "semantic-ui-react";
+import {Container, Grid, Loader, Menu} from "semantic-ui-react";
 import {AuthStatus} from "../auth/utils";
 import React, {useState} from "react";
 import {StoragesApi} from "../../api/storages-api";
@@ -9,6 +9,17 @@ import {StorageContent} from "../../components/storages/storages_content";
 import './index.css';
 
 const selectStorages = (state: any) => state.storages
+
+
+const PageLoader = () => {
+    return (
+        <Grid verticalAlign='middle' style={ {height: '100%'} }>
+            <Grid.Column>
+                <Loader active size='massive' inline='centered'/>
+            </Grid.Column>
+        </Grid>
+    )
+}
 
 export default function StoragesPage() {
     const dispatch = useDispatch();
@@ -62,6 +73,7 @@ export default function StoragesPage() {
 
 
     if (storages.shouldUpdate) {
+        setActiveStorage("")
         storagesApi.listStorages(dispatch, storages);
     } else {
         if (activeStorage === "" && storagesList.length > 0) {
@@ -69,10 +81,14 @@ export default function StoragesPage() {
         }
     }
 
+    if (storages.storagesListIsLoading) {
+        return <PageLoader/>
+    }
+
 
     return (
         <>
-            <Menu fixed='top' inverted style={{backgroundColor: '#011627'}}>
+            <Menu fixed='top' inverted style={ {backgroundColor: '#011627'} }>
                 <Container>
                     <Menu.Item as='a'>Home</Menu.Item>
                     <Menu.Item position='right'> <AuthStatus/></Menu.Item>
@@ -82,27 +98,33 @@ export default function StoragesPage() {
                 noItemsReceived && <NoItemsNotification/>
 
             }
-            <Grid columns={2} style={{height: '100%', padding: '14px', paddingTop: '70px'}}>
-                <Grid.Column width={2} style={{height: '100%', overflowY: 'scroll'}}>
+            <Grid columns={ 2 } style={ {height: '100%', padding: '14px', paddingTop: '70px'} }>
+                <Grid.Column width={ 2 } style={ {height: '100%', overflowY: 'scroll'} }>
                     <StoragesList
-                        storages={storagesList}
-                        activeStorage={activeStorage}
-                        onStorageSelect={selectStorage}
+                        storages={ storagesList }
+                        activeStorage={ activeStorage }
+                        onStorageSelect={ selectStorage }
                     />
                 </Grid.Column>
-                <Grid.Column width={14} style={{height: '100%', overflowY: 'scroll'}}>
-                    <StorageContent
-                        onFolderSelect={selectFolder}
-                        onDownloadKey={downloadKey}
-                        previewContent={previewContent}
-                        onPathClick={onPathClick}
-                        permissions={storagePermissions}
-                        storage={activeStorage}
-                        folders={storageContent.folders}
-                        files={storageContent.files}
-                        path={path}
-                        keyPreviewLoading={keyPreviewLoading}
-                    />
+                <Grid.Column width={ 14 } style={ {height: '100%', overflowY: 'scroll'} }>
+                    {
+                        storages.storagesContentIsLoading
+                            ? <PageLoader/>
+                            : <StorageContent
+                                onFolderSelect={ selectFolder }
+                                onDownloadKey={ downloadKey }
+                                previewContent={ previewContent }
+                                onPathClick={ onPathClick }
+                                permissions={ storagePermissions }
+                                storage={ activeStorage }
+                                folders={ storageContent.folders }
+                                files={ storageContent.files }
+                                path={ path }
+                                keyPreviewLoading={ keyPreviewLoading }
+                            />
+
+                    }
+
                 </Grid.Column>
             </Grid>
         </>

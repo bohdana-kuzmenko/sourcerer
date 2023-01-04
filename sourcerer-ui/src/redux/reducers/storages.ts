@@ -17,7 +17,9 @@ export const initialState = {
     noItemsReceived: false,
     shouldUpdate: true,
     sortedItems: [],
-    loading: false,
+    storagesListIsLoading: false,
+    storagesContentIsLoading: false,
+    storagesPermissionsIsLoading: false,
     storagesLoading: false,
     storagesContentLoading: false,
     keyPreviewLoading: false,
@@ -66,9 +68,10 @@ export default function storagesReducer(state = initialState, action: any) {
         case GET_STORAGES_START: {
             return {
                 ...state,
-                loading: true,
+                storagesListIsLoading: true,
                 shouldUpdate: false,
-
+                items: [],
+                sortedItems: {},
             }
         }case STORAGES_SHOULD_UPDATE: {
             return {
@@ -80,7 +83,7 @@ export default function storagesReducer(state = initialState, action: any) {
         case GET_STORAGES_SUCCESS: {
             return {
                 ...state,
-                loading: false,
+                storagesListIsLoading: false,
                 items: action.payload.items,
                 sortedItems: groupNames(action.payload.items).sort(dynamicSort("letter")),
                 noItemsReceived: action.payload.items.length === 0,
@@ -89,7 +92,7 @@ export default function storagesReducer(state = initialState, action: any) {
         case GET_STORAGES_FAILED: {
             return {
                 ...state,
-                loading: false,
+                storagesListIsLoading: false,
             }
         }
         case GET_STORAGES_CONTENT_START: {
@@ -99,14 +102,14 @@ export default function storagesReducer(state = initialState, action: any) {
                     "folders": [],
                     "files": []
                 },
-                loading: true
+                storagesContentIsLoading: true
 
             }
         }
         case GET_STORAGES_CONTENT_SUCCESS: {
             return {
                 ...state,
-                loading: false,
+                storagesContentIsLoading: false,
                 activeStorageContent: action.payload.items,
                 path: action.payload.path,
             }
@@ -114,21 +117,21 @@ export default function storagesReducer(state = initialState, action: any) {
         case GET_STORAGES_CONTENT_FAILED: {
             return {
                 ...state,
-                loading: false,
+                storagesContentIsLoading: false,
             }
         }
         case GET_STORAGES_PERMISSIONS_START: {
             return {
                 ...state,
                 activeStoragePermissions: {},
-                loading: true
+                storagesPermissionsIsLoading: true
 
             }
         }
         case GET_STORAGES_PERMISSIONS_SUCCESS: {
             return {
                 ...state,
-                loading: false,
+                storagesPermissionsIsLoading: false,
                 activeStoragePermissions: action.payload.permissions,
 
             }
@@ -136,7 +139,7 @@ export default function storagesReducer(state = initialState, action: any) {
         case GET_STORAGES_PERMISSIONS_FAILED: {
             return {
                 ...state,
-                loading: false,
+                storagesPermissionsIsLoading: false,
             }
         }
         case GET_KEY_PREVIEW_START: {
