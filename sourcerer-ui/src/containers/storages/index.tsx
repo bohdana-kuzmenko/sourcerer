@@ -61,7 +61,7 @@ export default function StoragesPage() {
     }
 
 
-    if (storagesList.length === 0 && !noItemsReceived) {
+    if (storages.shouldUpdate) {
         storagesApi.listStorages(dispatch, storages);
     } else {
         if (activeStorage === "" && storagesList.length > 0) {

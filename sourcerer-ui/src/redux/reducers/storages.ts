@@ -9,12 +9,13 @@ import {
     GET_STORAGES_PERMISSIONS_START,
     GET_STORAGES_PERMISSIONS_SUCCESS,
     GET_STORAGES_START,
-    GET_STORAGES_SUCCESS
+    GET_STORAGES_SUCCESS, STORAGES_SHOULD_UPDATE
 } from "../actions/storage";
 
 export const initialState = {
     items: [],
     noItemsReceived: false,
+    shouldUpdate: true,
     sortedItems: [],
     loading: false,
     storagesLoading: false,
@@ -65,7 +66,14 @@ export default function storagesReducer(state = initialState, action: any) {
         case GET_STORAGES_START: {
             return {
                 ...state,
-                loading: true
+                loading: true,
+                shouldUpdate: false,
+
+            }
+        }case STORAGES_SHOULD_UPDATE: {
+            return {
+                ...state,
+                shouldUpdate: true,
 
             }
         }

@@ -28,6 +28,15 @@ class SourceController:
     def list_registration(self, user):
         return self.service.list(user.id, exclude_inactive=False)
 
+    def activate_registration(self, user, registration_id):
+        registration = self.service.get(registration_id, return_raw_entity=True)
+        # ToDo: check user
+        return self.service.activate(registration)
+
+    def deactivate_registration(self, user, registration_id):
+        registration = self.service.get(registration_id, return_raw_entity=True)
+        return self.service.deactivate(registration)
+
     def list_sources(self, source_id: int = None, user: PydanticUser = None):
         if source_id:
             # todo: add check for ownership

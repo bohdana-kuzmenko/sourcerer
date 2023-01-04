@@ -6,7 +6,7 @@ import {
     GET_REGISTERED_CREDENTIALS_START,
     GET_REGISTERED_CREDENTIALS_SUCCESS
 } from "../redux/actions/registered-credentials";
-import {GET_KEY_PREVIEW_START, GET_KEY_PREVIEW_SUCCESS} from "../redux/actions/storage";
+import {GET_KEY_PREVIEW_START, GET_KEY_PREVIEW_SUCCESS, STORAGES_SHOULD_UPDATE} from "../redux/actions/storage";
 
 export class SettingsApi {
     getRegistrations = (dispatch: any, loading: boolean) => {
@@ -28,7 +28,6 @@ export class SettingsApi {
     }
 
     addRegistration = async (dispatch: any, credentials: any) => {
-
         await client.post("http://127.0.0.1:8000/api/v1/registrations",
             credentials,
         ).then((data) => {
@@ -36,7 +35,24 @@ export class SettingsApi {
         }).catch(() => {
             dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
         });
+    };
 
+    activateRegistration = async (dispatch: any, id: any) => {
+        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${id}/activate`,
+        ).then((data) => {
+            console.log(data)
+            dispatch({type: STORAGES_SHOULD_UPDATE})
+        }).catch(() => {
+            dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
+        });
+    };
+    deactivateRegistration = async (dispatch: any, id: any) => {
+        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${id}/deactivate`,
+        ).then((data) => {
+            dispatch({type: STORAGES_SHOULD_UPDATE})
+        }).catch(() => {
+            dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
+        });
     };
 
 }

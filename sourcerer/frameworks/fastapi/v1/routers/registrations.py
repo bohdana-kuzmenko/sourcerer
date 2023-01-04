@@ -23,6 +23,30 @@ async def list_registrations(
     return source_controller.list_registration(user)
 
 
+@router.get("/registrations/{registration_id}/activate")
+async def list_registrations(
+        registration_id: int,
+        user: PydanticUser = Depends(get_current_user)
+
+):
+    """
+    Get list of registered credentials
+    """
+    return source_controller.activate_registration(user, registration_id)
+
+
+@router.get("/registrations/{registration_id}/deactivate")
+async def list_registrations(
+        registration_id: int,
+        user: PydanticUser = Depends(get_current_user)
+
+):
+    """
+    Get list of registered credentials
+    """
+    return source_controller.deactivate_registration(user, registration_id)
+
+
 @router.post("/registrations")
 async def create_registration(
         source_registration: ExtendedPydanticSourceCredentials,

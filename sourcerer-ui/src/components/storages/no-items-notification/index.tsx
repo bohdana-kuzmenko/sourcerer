@@ -8,8 +8,8 @@ export const NoItemsNotification = () => {
         <Grid textAlign='center' style={{height: '100vh'}} verticalAlign='middle'>
             <Grid.Column style={{maxWidth: 450}}>
                 <Message>
-                    No storages available. ? <a className={"pointer"} onClick={() => navigate('/settings')}>Add new
-                    credentials</a>
+                    No storages available. <a className={"pointer"} onClick={() => navigate('/settings')}>Add new
+                    credentials?</a>
                 </Message>
             </Grid.Column>
         </Grid>

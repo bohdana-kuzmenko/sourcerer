@@ -28,14 +28,22 @@ class RegisteredSourcesService(BaseService):
             for i in self.db.query(SourceCredentials).filter(*filter_list).all()
         ]
 
-    def get(self, id):
+    def get(self, id, return_raw_entity=False):
         source = self.db.query(SourceCredentials).filter_by(id=id).first()
         if not source:
             raise SourceNotFoundException(id)
-        return PydanticSourceCredentials.from_orm(source)
+        return source if return_raw_entity else PydanticSourceCredentials.from_orm(source)
 
     def create(self, source: SourceCredentials):
         self.db.add(source)
+        self.db.commit()
+
+    def activate(self, registration):
+        registration.active = True
+        self.db.commit()
+
+    def deactivate(self, registration):
+        registration.active = False
         self.db.commit()
 
     def update(self):

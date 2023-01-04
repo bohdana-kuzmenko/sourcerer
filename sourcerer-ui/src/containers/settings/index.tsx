@@ -49,8 +49,6 @@ export default function SettingsPage() {
     const options = [
         {key: 'blobby', text: 'Blobby', value: 'BLOBBY'},
         {key: 'mcqueen', text: 'McQueen', value: 'MCQUEEN'},
-        {key: 'apple_s3', text: 's3 (Apple)', value: 'APPLE_S3'},
-        {key: 's3', text: 's3', value: 'S3'},
     ]
 
     const S3_COMPATIBLE_BUCKETS = ['BLOBBY', 'MCQUEEN', 'APPLE_S3', 'S3']
@@ -61,6 +59,16 @@ export default function SettingsPage() {
         })
         settingsApi.getRegistrations(dispatch, registeredCredentialsLoading);
     }
+    let onActiveChange = async (creds: any) => {
+        if (creds.active) {
+            await settingsApi.deactivateRegistration(dispatch, creds.id)
+        } else {
+             await settingsApi.activateRegistration(dispatch, creds.id)
+        }
+        settingsApi.getRegistrations(dispatch, registeredCredentialsLoading);
+    }
+
+
 
     return (
         <>
@@ -87,8 +95,12 @@ export default function SettingsPage() {
                                 registeredCredentials.map((creds: any) => {
                                     return (
                                         <Table.Row>
-                                            <Table.Cell collapsing><Checkbox slider
-                                                                             checked={ creds.active }/></Table.Cell>
+                                            <Table.Cell collapsing>
+                                                <Checkbox slider
+                                                          checked={ creds.active }
+                                                          onChange={ ()=> onActiveChange(creds)}
+                                                />
+                                            </Table.Cell>
                                             <Table.Cell>{ creds.provider }</Table.Cell>
                                             <Table.Cell>{ creds.credentials }</Table.Cell>
                                             <Table.Cell>{ creds.created_at }</Table.Cell>
