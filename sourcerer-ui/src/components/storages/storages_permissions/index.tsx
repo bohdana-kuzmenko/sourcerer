@@ -1,4 +1,4 @@
-import { Icon, Table } from "semantic-ui-react";
+import {Icon, Table} from "semantic-ui-react";
 import React from "react";
 
 interface StoragePermissionsParams {
@@ -16,10 +16,12 @@ export const StoragePermissions = (props: StoragePermissionsParams) => {
                 </Table.Row>
             </Table.Header>
             <Table.Header>
-                <Table.HeaderCell>User</Table.HeaderCell>
-                <Table.HeaderCell>Full Controll</Table.HeaderCell>
-                <Table.HeaderCell>Read</Table.HeaderCell>
-                <Table.HeaderCell>Write</Table.HeaderCell>
+                <Table.Row>
+                    <Table.HeaderCell>User</Table.HeaderCell>
+                    <Table.HeaderCell>Full Controll</Table.HeaderCell>
+                    <Table.HeaderCell>Read</Table.HeaderCell>
+                    <Table.HeaderCell>Write</Table.HeaderCell>
+                </Table.Row>
             </Table.Header>
             <Table.Body>
                 {
@@ -28,7 +30,7 @@ export const StoragePermissions = (props: StoragePermissionsParams) => {
                         // @ts-ignore
                         let usersPermissions = permissions[user]
                         return (
-                            <Table.Row>
+                            <Table.Row key={ user + '-permissions' }>
                                 <Table.Cell>{ user }</Table.Cell>
                                 <Table.Cell>{ usersPermissions.indexOf('FULL_CONTROL') !== -1 &&
                                     <Icon color='yellow' name='checkmark' size='large'/> }</Table.Cell>

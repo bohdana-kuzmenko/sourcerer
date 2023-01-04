@@ -67,20 +67,23 @@ export const StorageContent = (props: any) => {
                         <Grid.Row columns={ 2 }>
                             <Grid.Column>
                                 <Breadcrumb>
-                                    <Breadcrumb.Section link onClick={ (e) => changePath(e, -1) }>
+                                    <Breadcrumb.Section key={storage+'-path-key'} link onClick={ (e) => changePath(e, -1) }>
                                         { storage }
                                     </Breadcrumb.Section>
-                                    <Breadcrumb.Divider/>
+                                    <Breadcrumb.Divider key={storage+'-brcr-key'}/>
                                     {
                                         path.split('/').map((folder: any, index: number) => {
+                                            if (folder.length === 0) {
+                                                return null
+                                            }
                                             return (
                                                 <>
                                                     <Breadcrumb.Section
                                                         onClick={ (e) => changePath(e, index) }
-                                                        key={ folder + 'key' }
+                                                        key={ folder + '-path-key' }
                                                         link>{ folder }</Breadcrumb.Section>
                                                     { index !== path.split('/').length - 1 &&
-                                                        <Breadcrumb.Divider key={ folder + 'brcr' }/> }
+                                                        <Breadcrumb.Divider key={ folder + '-brcr-key' }/> }
                                                 </>
                                             )
                                         })
@@ -102,13 +105,13 @@ export const StorageContent = (props: any) => {
                     {
                         folders.map((folder: any) => {
                             return (
-                                <Table.Row className={ 'folder-name' } key={ folder }
+                                <Table.Row className={ 'folder-name' } key={ folder + '-storage-content' }
                                            onClick={ () => onFolderSelect(folder) }>
                                     <Table.Cell colSpan='4' collapsing><Icon name='folder'/> { folder }</Table.Cell>
                                 </Table.Row>
                             )
                         })
-                    } {
+                    }{
                     files.map((file: any) => {
                         return (
                             <Table.Row className={ 'file-row' } key={ file.key }

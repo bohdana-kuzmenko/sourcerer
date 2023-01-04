@@ -63,11 +63,10 @@ export default function SettingsPage() {
         if (creds.active) {
             await settingsApi.deactivateRegistration(dispatch, creds.id)
         } else {
-             await settingsApi.activateRegistration(dispatch, creds.id)
+            await settingsApi.activateRegistration(dispatch, creds.id)
         }
         settingsApi.getRegistrations(dispatch, registeredCredentialsLoading);
     }
-
 
 
     return (
@@ -85,20 +84,22 @@ export default function SettingsPage() {
                     </Button>
                     <Table>
                         <Table.Header>
-                            <Table.HeaderCell/>
-                            <Table.HeaderCell>Provider</Table.HeaderCell>
-                            <Table.HeaderCell>Credentials</Table.HeaderCell>
-                            <Table.HeaderCell>Date created</Table.HeaderCell>
+                            <Table.Row>
+                                <Table.HeaderCell/>
+                                <Table.HeaderCell>Provider</Table.HeaderCell>
+                                <Table.HeaderCell>Credentials</Table.HeaderCell>
+                                <Table.HeaderCell>Date created</Table.HeaderCell>
+                            </Table.Row>
                         </Table.Header>
                         <Table.Body>
                             {
                                 registeredCredentials.map((creds: any) => {
                                     return (
-                                        <Table.Row>
+                                        <Table.Row key={ creds.id + '-id-creds' }>
                                             <Table.Cell collapsing>
                                                 <Checkbox slider
                                                           checked={ creds.active }
-                                                          onChange={ ()=> onActiveChange(creds)}
+                                                          onChange={ () => onActiveChange(creds) }
                                                 />
                                             </Table.Cell>
                                             <Table.Cell>{ creds.provider }</Table.Cell>
