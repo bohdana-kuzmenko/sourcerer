@@ -22,7 +22,7 @@ router = UsersAPIRouter(prefix='/auth')
 
 
 @router.post("/signin")
-async def signin(user: PydanticUser):
+def signin(user: PydanticUser):
     user = users_controller.create(**user.dict())
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
@@ -37,7 +37,7 @@ async def signin(user: PydanticUser):
 
 
 @router.post("/login")
-async def login(credentials: Credentials):
+def login(credentials: Credentials):
     user = users_controller.get_by_email(credentials.username)
     if not user:
         raise Exception("not author")  # ToDo: not authorized exception
@@ -56,7 +56,7 @@ async def login(credentials: Credentials):
 
 
 @router.get("/token")
-async def get_auth_token(
+def get_auth_token(
         user: PydanticUser = Depends(get_current_basic_auth_user)
 ):
     """
@@ -76,7 +76,7 @@ async def get_auth_token(
 
 
 @router.get("/me")
-async def get_user(
+def get_user(
         user: PydanticUser = Depends(get_current_user)
 ):
     """

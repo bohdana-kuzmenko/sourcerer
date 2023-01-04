@@ -17,18 +17,19 @@ router = StoragesAPIRouter()
 
 
 @router.get("/storages")
-async def storages(
+def storages(
         user: PydanticUser = Depends(get_current_user)
 ):
     """
     Get list of available storages
     :return:
     """
+    time.sleep(600)
     return source_controller.list_sources(None, user)
 
 
 @router.get("/registrations/{registration_id}/storages")
-async def storages(registration_id):
+def storages(registration_id):
     """
     Get list of available storages
     :return:
@@ -37,7 +38,7 @@ async def storages(registration_id):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}")
-async def storages(registration_id, storage_name, path: str = ""):
+def storages(registration_id, storage_name, path: str = ""):
     """
     Get list of available storages for credentials registration
     :return:
@@ -46,7 +47,7 @@ async def storages(registration_id, storage_name, path: str = ""):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}/permissions")
-async def storages(registration_id, storage_name):
+def storages(registration_id, storage_name):
     """
     List storage permissions
     :return:
@@ -55,7 +56,7 @@ async def storages(registration_id, storage_name):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}/download_url")
-async def get_download_url(registration_id, storage_name, path: str = ""):
+def get_download_url(registration_id, storage_name, path: str = ""):
     """
     :param registration_id:
     :param storage_name:
@@ -66,7 +67,7 @@ async def get_download_url(registration_id, storage_name, path: str = ""):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}/preview")
-async def preview(registration_id, storage_name, path: str = ""):
+def preview(registration_id, storage_name, path: str = ""):
     """
     :param registration_id:
     :param storage_name:

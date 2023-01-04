@@ -14,7 +14,7 @@ router = RegistrationsAPIRouter()
 
 
 @router.get("/registrations")
-async def list_registrations(
+def list_registrations(
         user: PydanticUser = Depends(get_current_user)
 ):
     """
@@ -24,7 +24,7 @@ async def list_registrations(
 
 
 @router.get("/registrations/{registration_id}/activate")
-async def list_registrations(
+def list_registrations(
         registration_id: int,
         user: PydanticUser = Depends(get_current_user)
 
@@ -36,7 +36,7 @@ async def list_registrations(
 
 
 @router.get("/registrations/{registration_id}/deactivate")
-async def list_registrations(
+def list_registrations(
         registration_id: int,
         user: PydanticUser = Depends(get_current_user)
 
@@ -48,7 +48,7 @@ async def list_registrations(
 
 
 @router.post("/registrations")
-async def create_registration(
+def create_registration(
         source_registration: ExtendedPydanticSourceCredentials,
         user: PydanticUser = Depends(get_current_user)
 ):
