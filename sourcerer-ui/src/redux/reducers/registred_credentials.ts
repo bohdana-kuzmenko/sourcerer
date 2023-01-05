@@ -1,12 +1,15 @@
 import {
     GET_REGISTERED_CREDENTIALS_SUCCESS,
     GET_REGISTERED_CREDENTIALS_START,
-    GET_REGISTERED_CREDENTIALS_FAILED
+    GET_REGISTERED_CREDENTIALS_FAILED,
+    CLEAN_SETTINGS_ERROR
 } from "../actions/registered-credentials";
 
 export const initialState = {
     items: [],
     loading: false,
+    shouldLoadCredentials: true,
+    error: undefined
 
 }
 export default function registeredCredentialsReducer(state = initialState, action: any) {
@@ -16,6 +19,13 @@ export default function registeredCredentialsReducer(state = initialState, actio
             return {
                 ...state,
                 loading: true,
+                error: undefined,
+            }
+        }
+        case CLEAN_SETTINGS_ERROR: {
+            return {
+                ...state,
+                error: undefined
             }
         }
         case GET_REGISTERED_CREDENTIALS_SUCCESS: {
@@ -23,12 +33,15 @@ export default function registeredCredentialsReducer(state = initialState, actio
                 ...state,
                 loading: false,
                 items: action.payload.items,
+                shouldLoadCredentials: false,
             }
         }
         case GET_REGISTERED_CREDENTIALS_FAILED: {
             return {
                 ...state,
                 loading: false,
+                error: action.payload.error,
+                shouldLoadCredentials: false,
             }
         }
         default:

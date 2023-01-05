@@ -20,8 +20,13 @@ export class SettingsApi {
                         items: data,
                     }
                 })
-            }).catch(() => {
-                dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
+            }).catch((data) => {
+                dispatch({
+                    type: GET_REGISTERED_CREDENTIALS_FAILED,
+                    payload: {
+                        error: data
+                    }
+                })
             });
         }
         ;
@@ -38,7 +43,7 @@ export class SettingsApi {
     };
 
     activateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${id}/activate`,
+        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${ id }/activate`,
         ).then((data) => {
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {
@@ -46,7 +51,7 @@ export class SettingsApi {
         });
     };
     deactivateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${id}/deactivate`,
+        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${ id }/deactivate`,
         ).then((data) => {
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {

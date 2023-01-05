@@ -1,10 +1,13 @@
 import {useDispatch, useSelector} from "react-redux";
-import {StoragesApi} from "../../api/storages-api";
-import React, {useState} from "react";
-import {Button, Checkbox, Container, Divider, Form, Grid, Icon, Menu, Modal, Table} from "semantic-ui-react";
+import React from "react";
+import {Button, Checkbox, Container, Form, Grid, Icon, Menu, Modal, Table} from "semantic-ui-react";
 import {AuthStatus} from "../auth/utils";
 import {useNavigate} from "react-router-dom";
 import {SettingsApi} from "../../api/settings-api";
+import {SemanticToastContainer, toast} from 'react-semantic-toasts';
+import 'react-semantic-toasts/styles/react-semantic-alert.css';
+import {CLEAN_ERROR} from "../../redux/actions/storage";
+import {CLEAN_SETTINGS_ERROR} from "../../redux/actions/registered-credentials";
 
 
 interface InputFieldParams {
@@ -39,8 +42,24 @@ export default function SettingsPage() {
     let registeredCredentialsLoading = selector.loading;
     const settingsApi = new SettingsApi()
 
-    if (registeredCredentials.length === 0) {
+    if (selector.shouldLoadCredentials) {
         settingsApi.getRegistrations(dispatch, registeredCredentialsLoading);
+    }
+    if (selector.error !== undefined) {
+         toast(
+            {
+                title: "Error:" + selector.error,
+                type: "error",
+                time: 5000,
+                color: "yellow",
+                icon: "exclamation",
+                size: "tiny"
+            },
+            () => dispatch({type: CLEAN_ERROR}),
+            () => dispatch({type: CLEAN_ERROR}),
+            () => dispatch({type: CLEAN_ERROR})
+        );
+        dispatch({type: CLEAN_SETTINGS_ERROR})
     }
 
     const [open, setOpen] = React.useState(false)
@@ -71,6 +90,7 @@ export default function SettingsPage() {
 
     return (
         <>
+             <SemanticToastContainer className={ "customToast" }/>
             <Menu fixed='top' inverted style={ {backgroundColor: '#011627'} }>
                 <Container>
                     <Menu.Item as='a' onClick={ () => navigate('/storages') }>Home</Menu.Item>
