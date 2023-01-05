@@ -26,7 +26,7 @@ def storages(
 
 
 @router.get("/registrations/{registration_id}/storages")
-def storages(registration_id):
+def storages(registration_id, user: PydanticUser = Depends(get_current_user)):
     """
     Get list of available storages
     :return:
@@ -35,7 +35,7 @@ def storages(registration_id):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}")
-def storages(registration_id, storage_name, path: str = ""):
+def storages(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
     """
     Get list of available storages for credentials registration
     :return:
@@ -44,7 +44,7 @@ def storages(registration_id, storage_name, path: str = ""):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}/permissions")
-def storages(registration_id, storage_name):
+def storages(registration_id, storage_name, user: PydanticUser = Depends(get_current_user)):
     """
     List storage permissions
     :return:
@@ -53,7 +53,7 @@ def storages(registration_id, storage_name):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}/download_url")
-def get_download_url(registration_id, storage_name, path: str = ""):
+def get_download_url(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
     """
     :param registration_id:
     :param storage_name:
@@ -64,7 +64,7 @@ def get_download_url(registration_id, storage_name, path: str = ""):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}/preview")
-def preview(registration_id, storage_name, path: str = ""):
+def preview(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
     """
     :param registration_id:
     :param storage_name:
