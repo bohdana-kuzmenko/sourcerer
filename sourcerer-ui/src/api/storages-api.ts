@@ -87,6 +87,7 @@ export class StoragesApi {
         const url = `http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/download_url?${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
+        request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
         request.send(null);
         let result = JSON.parse(request.responseText)
         dispatch({type: GET_KEY_PREVIEW_SUCCESS})
@@ -99,6 +100,7 @@ export class StoragesApi {
         const url = `http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/preview?${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
+        request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
         request.send(null);
         let result = request.responseText
         dispatch({type: GET_KEY_PREVIEW_SUCCESS})
