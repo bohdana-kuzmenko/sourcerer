@@ -1,6 +1,8 @@
 import {useDispatch} from "react-redux";
 import {USER_AUTHORISE_FAILED, USER_AUTHORISE_START, USER_AUTHORISE_SUCCESS} from "../redux/actions/auth";
 import {client} from "./client";
+import {STORAGES_SHOULD_UPDATE} from "../redux/actions/storage";
+import {CREDENTIALS_SHOULD_UPDATE} from "../redux/actions/registered-credentials";
 
 export class UsersApi {
     getCurrentUser = (dispatch: any, user: any) => {
@@ -19,7 +21,8 @@ export class UsersApi {
             }).catch(() => {
                 dispatch({type: USER_AUTHORISE_FAILED})
             });
-        };
+        }
+        ;
     }
 
     login = (dispatch: any, username: string, password: string, callback: VoidFunction) => {
@@ -35,6 +38,12 @@ export class UsersApi {
                     username: data.user,
                     token: data.access_token,
                 }
+            })
+            dispatch({
+                type: STORAGES_SHOULD_UPDATE,
+            })
+            dispatch({
+                type: CREDENTIALS_SHOULD_UPDATE,
             })
             callback();
         }).catch(() => {

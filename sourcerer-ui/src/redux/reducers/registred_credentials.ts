@@ -2,7 +2,7 @@ import {
     GET_REGISTERED_CREDENTIALS_SUCCESS,
     GET_REGISTERED_CREDENTIALS_START,
     GET_REGISTERED_CREDENTIALS_FAILED,
-    CLEAN_SETTINGS_ERROR
+    CLEAN_SETTINGS_ERROR, CREDENTIALS_SHOULD_UPDATE
 } from "../actions/registered-credentials";
 
 export const initialState = {
@@ -26,6 +26,12 @@ export default function registeredCredentialsReducer(state = initialState, actio
             return {
                 ...state,
                 error: undefined
+            }
+        }
+        case CREDENTIALS_SHOULD_UPDATE: {
+            return {
+                ...state,
+                shouldLoadCredentials: true
             }
         }
         case GET_REGISTERED_CREDENTIALS_SUCCESS: {
