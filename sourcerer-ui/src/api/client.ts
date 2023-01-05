@@ -1,3 +1,5 @@
+import {useNavigate} from "react-router-dom";
+
 export async function client(endpoint: string, {body, ...customConfig}: any = {}) {
     const headers = {'Content-Type': 'application/json'}
 
@@ -23,6 +25,10 @@ export async function client(endpoint: string, {body, ...customConfig}: any = {}
         }
         throw new Error(response.statusText)
     } catch (err: any) {
+        if (err.message === 'Unauthorized') {
+            // eslint-disable-next-line no-restricted-globals
+            location.assign("/authenticate")
+        }
         if (data?.error) {
             return Promise.reject(data.error)
         }
@@ -33,11 +39,13 @@ export async function client(endpoint: string, {body, ...customConfig}: any = {}
 client.get = function (endpoint: string, customConfig = {}) {
     return client(endpoint, {
         headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
-        ...customConfig, method: 'GET'})
+        ...customConfig, method: 'GET'
+    })
 }
 
 client.post = function (endpoint: string, body: any, customConfig = {}) {
     return client(endpoint, {
         headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
-        ...customConfig, body})
+        ...customConfig, body
+    })
 }
