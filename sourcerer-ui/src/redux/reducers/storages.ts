@@ -1,4 +1,5 @@
 import {
+    CLEAN_ERROR,
     GET_KEY_PREVIEW_FAILED,
     GET_KEY_PREVIEW_START, GET_KEY_PREVIEW_SUCCESS,
     GET_STORAGES_CONTENT_FAILED,
@@ -30,7 +31,8 @@ export const initialState = {
         "files": []
     },
     activeStoragePermissions: {},
-    activeStorageMetadata: {}
+    activeStorageMetadata: {},
+    error: undefined
 }
 
 const groupNames = (arr: any) => {
@@ -71,9 +73,16 @@ export default function storagesReducer(state = initialState, action: any) {
                 storagesListIsLoading: true,
                 shouldUpdate: false,
                 items: [],
-                sortedItems: {},
+                sortedItems: [],
             }
-        }case STORAGES_SHOULD_UPDATE: {
+        }
+        case CLEAN_ERROR: {
+            return {
+                ...state,
+                error: undefined,
+            }
+        }
+        case STORAGES_SHOULD_UPDATE: {
             return {
                 ...state,
                 shouldUpdate: true,
@@ -93,6 +102,7 @@ export default function storagesReducer(state = initialState, action: any) {
             return {
                 ...state,
                 storagesListIsLoading: false,
+                error: action.payload.error
             }
         }
         case GET_STORAGES_CONTENT_START: {
@@ -118,6 +128,7 @@ export default function storagesReducer(state = initialState, action: any) {
             return {
                 ...state,
                 storagesContentIsLoading: false,
+                error: action.payload.error
             }
         }
         case GET_STORAGES_PERMISSIONS_START: {
@@ -140,6 +151,7 @@ export default function storagesReducer(state = initialState, action: any) {
             return {
                 ...state,
                 storagesPermissionsIsLoading: false,
+                error: action.payload.error
             }
         }
         case GET_KEY_PREVIEW_START: {

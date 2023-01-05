@@ -23,6 +23,9 @@ export async function client(endpoint: string, {body, ...customConfig}: any = {}
         }
         throw new Error(response.statusText)
     } catch (err: any) {
+        if (data?.error) {
+            return Promise.reject(data.error)
+        }
         return Promise.reject(err.message ? err.message : data)
     }
 }

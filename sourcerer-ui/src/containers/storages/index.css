@@ -21,11 +21,11 @@
     background-color: orange;
 }
 
-.folder-name:hover{
+.folder-name:hover {
     cursor: pointer;
 }
 
-.file-row:hover{
+.file-row:hover {
     cursor: pointer;
     user-select: none;
     -moz-user-select: none;

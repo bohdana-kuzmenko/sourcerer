@@ -27,17 +27,23 @@ export class StoragesApi {
                         items: data,
                     }
                 })
-            }).catch(() => {
-                dispatch({type: GET_STORAGES_FAILED})
+            }).catch((data) => {
+                dispatch({
+                    type: GET_STORAGES_FAILED,
+                    payload: {
+                        error: data
+                    }
+                })
             });
-        };
+        }
+        ;
     }
 
     getStorageContent = (dispatch: any, registrationId: string, storageName: string, path: string) => {
         dispatch({type: GET_STORAGES_CONTENT_START})
 
         const params = new URLSearchParams({path: path});
-        client.get(`http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}?`+params
+        client.get(`http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }?` + params
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_CONTENT_SUCCESS,
@@ -46,14 +52,19 @@ export class StoragesApi {
                     path: path
                 }
             })
-        }).catch((ex) => {
-            dispatch({type: GET_STORAGES_CONTENT_FAILED})
+        }).catch((data) => {
+            dispatch({
+                type: GET_STORAGES_CONTENT_FAILED,
+                payload: {
+                    error: data
+                }
+            })
         });
     };
     getStoragePermissions = (dispatch: any, registrationId: string, storageName: string) => {
         dispatch({type: GET_STORAGES_PERMISSIONS_START})
 
-        client.get(`http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}/permissions`
+        client.get(`http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/permissions`
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_PERMISSIONS_SUCCESS,
@@ -61,14 +72,19 @@ export class StoragesApi {
                     permissions: data,
                 }
             })
-        }).catch(() => {
-            dispatch({type: GET_STORAGES_PERMISSIONS_FAILED})
+        }).catch((data) => {
+            dispatch({
+                type: GET_STORAGES_PERMISSIONS_FAILED,
+                payload: {
+                    error: data
+                }
+            })
         });
     };
-    getKeyDownloadUrl = (dispatch: any,registrationId: string, storageName: string, path:string) => {
+    getKeyDownloadUrl = (dispatch: any, registrationId: string, storageName: string, path: string) => {
         dispatch({type: GET_KEY_PREVIEW_START})
         const params = new URLSearchParams({path: path});
-        const url = `http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}/download_url?${params}`
+        const url = `http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/download_url?${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
         request.send(null);
@@ -77,10 +93,10 @@ export class StoragesApi {
         return result
     };
 
-    getKeyContent = (dispatch: any,registrationId: string, storageName: string, path:string) => {
+    getKeyContent = (dispatch: any, registrationId: string, storageName: string, path: string) => {
         dispatch({type: GET_KEY_PREVIEW_START})
         const params = new URLSearchParams({path: path});
-        const url = `http://127.0.0.1:8000/api/v1/registrations/${registrationId}/storages/${storageName}/preview?${params}`
+        const url = `http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/preview?${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
         request.send(null);

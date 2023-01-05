@@ -6,7 +6,11 @@ import {StoragesApi} from "../../api/storages-api";
 import {NoItemsNotification} from "../../components/storages/no-items-notification";
 import {StoragesList} from "../../components/storages/storages_list";
 import {StorageContent} from "../../components/storages/storages_content";
+import {SemanticToastContainer, toast} from 'react-semantic-toasts';
+import 'react-semantic-toasts/styles/react-semantic-alert.css';
+
 import './index.css';
+import {CLEAN_ERROR} from "../../redux/actions/storage";
 
 const selectStorages = (state: any) => state.storages
 
@@ -84,10 +88,29 @@ export default function StoragesPage() {
     if (storages.storagesListIsLoading) {
         return <PageLoader/>
     }
+    if (storages.error !== undefined) {
+        // @ts-ignore
+
+        toast(
+            {
+                title: "Error:" + storages.error,
+                type: "error",
+                time: 5000,
+                color: "yellow",
+                icon: "exclamation",
+                size: "tiny"
+            },
+            () => dispatch({type: CLEAN_ERROR}),
+            () => dispatch({type: CLEAN_ERROR}),
+            () => dispatch({type: CLEAN_ERROR})
+        );
+        dispatch({type: CLEAN_ERROR})
+    }
 
 
     return (
         <>
+            <SemanticToastContainer className={ "customToast" }/>
             <Menu fixed='top' inverted style={ {backgroundColor: '#011627'} }>
                 <Container>
                     <Menu.Item as='a'>Home</Menu.Item>
@@ -124,7 +147,6 @@ export default function StoragesPage() {
                             />
 
                     }
-
                 </Grid.Column>
             </Grid>
         </>
