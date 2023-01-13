@@ -91,9 +91,10 @@ class SourceController:
 
     def download_data(self, source_id, bucket, key):
         pass
-        # source = self.service.get(source_id)
-        #
-        # remote_service = RemoteSourcesRegistry().get(source.provider)(
-        #     source.credentials
-        # )
-        # return remote_service.get
+
+    def delete_key(self, source_id, bucket, key):
+        source = self.service.get(source_id)
+        remote_service = RemoteSourcesRegistry().get(source.provider)(
+            source.credentials.decode("utf-8")
+        )
+        return remote_service.delete_storage_item(bucket, key)

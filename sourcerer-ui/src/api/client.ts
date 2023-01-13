@@ -43,6 +43,13 @@ client.get = function (endpoint: string, customConfig = {}) {
     })
 }
 
+client.delete = function (endpoint: string, customConfig = {}) {
+    return client(endpoint, {
+        headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
+        ...customConfig, method: 'DELETE'
+    })
+}
+
 client.post = function (endpoint: string, body: any, customConfig = {}) {
     return client(endpoint, {
         headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},

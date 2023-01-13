@@ -74,6 +74,9 @@ export default function StoragesPage() {
         link.href = url
         link.click()
     }
+    const deleteKey = (key: string) => {
+        storagesApi.deleteKey(dispatch, registrationId, activeStorage, storages.path,  key)
+    }
 
 
     if (storages.shouldUpdate) {
@@ -136,6 +139,7 @@ export default function StoragesPage() {
                             : <StorageContent
                                 onFolderSelect={ selectFolder }
                                 onDownloadKey={ downloadKey }
+                                onDeleteKey={ deleteKey }
                                 previewContent={ previewContent }
                                 onPathClick={ onPathClick }
                                 permissions={ storagePermissions }

@@ -69,8 +69,11 @@ class S3CompatibleBase(BaseRemoteService):
     def put_storage_item(self):
         pass
 
-    def delete_storage_item(self):
-        pass
+    def delete_storage_item(self, storage: str, key: str):
+        print("HERE")
+        print(storage)
+        print(key)
+        return self.resource.Object(storage, key).delete()
 
     def get_download_url(self, storage: str, key: str, expiration: int = 600):
         return self.client.generate_presigned_url('get_object', Params={'Bucket': storage, 'Key': key}, ExpiresIn=expiration)

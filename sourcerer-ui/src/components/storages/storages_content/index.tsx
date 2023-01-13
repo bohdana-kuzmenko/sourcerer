@@ -25,6 +25,7 @@ export const StorageContent = (props: any) => {
     let permissions = props.permissions
     let onFolderSelect = props.onFolderSelect
     let onDownloadKey = props.onDownloadKey
+    let onDeleteKey = props.onDeleteKey
     let keyPreviewLoading = props.keyPreviewLoading
 
     const onPreviewOpen = (key: string) => {
@@ -123,8 +124,12 @@ export const StorageContent = (props: any) => {
                                     <Dropdown closeOnBlur item pointing={ "top right" } icon='ellipsis vertical'>
                                         <Dropdown.Menu>
                                             <Dropdown.Item
-                                                onClick={ () => onDownloadKey(file.key) }>Download</Dropdown.Item>
+                                                onClick={ () => onDownloadKey(file.key) }>Download
+                                            </Dropdown.Item>
                                             <Dropdown.Item>Share</Dropdown.Item>
+                                            <Dropdown.Item
+                                                onClick={ () => onDeleteKey(file.key) }>Delete
+                                            </Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </Table.Cell>

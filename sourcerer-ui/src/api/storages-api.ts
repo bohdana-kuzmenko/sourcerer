@@ -2,6 +2,8 @@ import {useDispatch} from "react-redux";
 import {USER_AUTHORISE_FAILED, USER_AUTHORISE_START, USER_AUTHORISE_SUCCESS} from "../redux/actions/auth";
 import {client} from "./client";
 import {
+    DELETE_KEY_FAILED,
+    DELETE_KEY_START, DELETE_KEY_SUCCESS,
     GET_KEY_DOWNLOAD_URL_FAILED,
     GET_KEY_DOWNLOAD_URL_START, GET_KEY_DOWNLOAD_URL_SUCCESS, GET_KEY_PREVIEW_START, GET_KEY_PREVIEW_SUCCESS,
     GET_STORAGES_CONTENT_FAILED,
@@ -19,7 +21,7 @@ export class StoragesApi {
     listStorages = (dispatch: any, storages: any) => {
         if (!storages.loading) {
             dispatch({type: GET_STORAGES_START})
-            client.get("http://127.0.0.1:8000/api/v1/storages"
+            client.get("http://127.0.0.1:8010/api/v1/storages"
             ).then((data) => {
                 dispatch({
                     type: GET_STORAGES_SUCCESS,
@@ -43,7 +45,7 @@ export class StoragesApi {
         dispatch({type: GET_STORAGES_CONTENT_START})
 
         const params = new URLSearchParams({path: path});
-        client.get(`http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }?` + params
+        client.get(`http://127.0.0.1:8010/api/v1/registrations/${ registrationId }/storages/${ storageName }?` + params
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_CONTENT_SUCCESS,
@@ -64,7 +66,7 @@ export class StoragesApi {
     getStoragePermissions = (dispatch: any, registrationId: string, storageName: string) => {
         dispatch({type: GET_STORAGES_PERMISSIONS_START})
 
-        client.get(`http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/permissions`
+        client.get(`http://127.0.0.1:8010/api/v1/registrations/${ registrationId }/storages/${ storageName }/permissions`
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_PERMISSIONS_SUCCESS,
@@ -84,7 +86,7 @@ export class StoragesApi {
     getKeyDownloadUrl = (dispatch: any, registrationId: string, storageName: string, path: string) => {
         dispatch({type: GET_KEY_PREVIEW_START})
         const params = new URLSearchParams({path: path});
-        const url = `http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/download_url?${ params }`
+        const url = `http://127.0.0.1:8010/api/v1/registrations/${ registrationId }/storages/${ storageName }/download_url?${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
         request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
@@ -97,7 +99,7 @@ export class StoragesApi {
     getKeyContent = (dispatch: any, registrationId: string, storageName: string, path: string) => {
         dispatch({type: GET_KEY_PREVIEW_START})
         const params = new URLSearchParams({path: path});
-        const url = `http://127.0.0.1:8000/api/v1/registrations/${ registrationId }/storages/${ storageName }/preview?${ params }`
+        const url = `http://127.0.0.1:8010/api/v1/registrations/${ registrationId }/storages/${ storageName }/preview?${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
         request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
@@ -105,6 +107,29 @@ export class StoragesApi {
         let result = request.responseText
         dispatch({type: GET_KEY_PREVIEW_SUCCESS})
         return result
+    };
+
+    deleteKey = (dispatch: any, registrationId: string, storageName: string, path: string, key: string) => {
+        let self = this
+        dispatch({type: DELETE_KEY_START})
+        const params = new URLSearchParams({path: path+key});
+        client.delete(`http://127.0.0.1:8010/api/v1/registrations/${ registrationId }/storages/${ storageName }?${ params }`
+        ).then((data) => {
+            dispatch({
+                type: DELETE_KEY_SUCCESS,
+                payload : {}
+            })
+            self.getStorageContent(dispatch, registrationId, storageName, path)
+
+        }).catch((data) => {
+            dispatch({
+                type: DELETE_KEY_FAILED,
+                payload: {
+                    error: data
+                }
+            })
+        });
+
     };
 
 }

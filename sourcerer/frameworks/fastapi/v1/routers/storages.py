@@ -63,6 +63,19 @@ def get_download_url(registration_id, storage_name, path: str = "", user: Pydant
     return source_controller.get_download_url(registration_id, storage_name, path)
 
 
+
+@router.delete("/registrations/{registration_id}/storages/{storage_name}")
+def delete_key(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
+    """
+    :param registration_id:
+    :param storage_name:
+    :param path:
+    :return:
+    """
+    print('@router.delete("/registrations/{registration_id}/storages/{storage_name}")')
+    return source_controller.delete_key(registration_id, storage_name, path)
+
+
 @router.get("/registrations/{registration_id}/storages/{storage_name}/preview")
 def preview(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
     """

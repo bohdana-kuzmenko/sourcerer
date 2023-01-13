@@ -12,7 +12,7 @@ export class SettingsApi {
     getRegistrations = (dispatch: any, loading: boolean) => {
         if (!loading) {
             dispatch({type: GET_REGISTERED_CREDENTIALS_START})
-            client.get("http://127.0.0.1:8000/api/v1/registrations",
+            client.get("http://127.0.0.1:8010/api/v1/registrations",
             ).then((data) => {
                 dispatch({
                     type: GET_REGISTERED_CREDENTIALS_SUCCESS,
@@ -33,7 +33,7 @@ export class SettingsApi {
     }
 
     addRegistration = async (dispatch: any, credentials: any) => {
-        await client.post("http://127.0.0.1:8000/api/v1/registrations",
+        await client.post("http://127.0.0.1:8010/api/v1/registrations",
             credentials,
         ).then((data) => {
 
@@ -43,7 +43,7 @@ export class SettingsApi {
     };
 
     activateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${ id }/activate`,
+        await client.get(`http://127.0.0.1:8010/api/v1/registrations/${ id }/activate`,
         ).then((data) => {
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {
@@ -51,7 +51,7 @@ export class SettingsApi {
         });
     };
     deactivateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`http://127.0.0.1:8000/api/v1/registrations/${ id }/deactivate`,
+        await client.get(`http://127.0.0.1:8010/api/v1/registrations/${ id }/deactivate`,
         ).then((data) => {
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {

@@ -45,7 +45,7 @@ class BaseRemoteService(BaseService):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def delete_storage_item(self):
+    def delete_storage_item(self, storage: str, key: str):
         raise NotImplementedError
 
     @abc.abstractmethod
