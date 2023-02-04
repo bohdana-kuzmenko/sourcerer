@@ -1,0 +1,2 @@
+include sourcerer/plugins/sourcerer_ui/.*
+include sourcerer/plugins/sourcerer_ui/package.json
