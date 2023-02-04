@@ -40,7 +40,7 @@ def signin(user: PydanticUser):
 def login(credentials: Credentials):
     user = users_controller.get_by_email(credentials.username)
     if not user:
-        raise Exception("not author")  # ToDo: not authorized exception
+        raise Exception(f"User with email {credentials.username} does not exist")  # ToDo: not authorized exception
     if not users_controller.validate_password(user, credentials.password):
         raise Exception("not author")  # ToDo: not authorized exception
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
@@ -60,7 +60,7 @@ def get_auth_token(
         user: PydanticUser = Depends(get_current_basic_auth_user)
 ):
     """
-    Generate JWT token for token-based  authentication. 
+    Generate JWT token for token-based  authentication.
     Token expires in 30 minutes
     """
     if not user:

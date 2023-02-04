@@ -52,7 +52,7 @@ class UsersService(BaseUsersService):
     def get_by_email(self, email: str) -> PydanticUser:
         user = self.db.query(User).filter_by(email=email).first()
         if not user:
-            raise UserNotFoundException(email)
+            return
         return PydanticUser.from_orm(user)
 
     def verify_user_credentials(self, user: PydanticUser, password: str) -> bool:

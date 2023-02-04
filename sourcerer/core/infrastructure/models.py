@@ -41,7 +41,7 @@ PydanticSourceCredentials = sqlalchemy_to_pydantic(SourceCredentials)
 
 
 class PydanticUser(PydanticUserBase):
-    id: Optional[int]
+    id: Optional[int] = None
 
 
 class ExtendedPydanticSourceCredentials(PydanticSourceCredentials):
