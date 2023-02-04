@@ -1,4 +1,5 @@
 import os
+import pathlib
 import subprocess
 from argparse import ArgumentParser
 import uvicorn
@@ -8,8 +9,8 @@ import uvicorn
 
 def run_ui_build():
     try:
-        subprocess.run("npm install", shell=True, cwd=os.path.join(os.path.abspath(os.curdir),"sourcerer/plugins/sourcerer_ui"))
-        subprocess.run("npm run build", shell=True, cwd=os.path.join(os.path.abspath(os.curdir),"sourcerer/plugins/sourcerer_ui"))
+        subprocess.run("npm install", shell=True, cwd=os.path.join(pathlib.Path(__file__).parent.resolve(),"plugins/sourcerer_ui"))
+        subprocess.run("npm run build", shell=True, cwd=os.path.join(pathlib.Path(__file__).parent.resolve(),"plugins/sourcerer_ui"))
         from sourcerer.plugins.sourcerer_ui.fast_api_app_extended import app
         uvicorn.run(app, host="0.0.0.0", port=8000)
     except Exception as ex:
