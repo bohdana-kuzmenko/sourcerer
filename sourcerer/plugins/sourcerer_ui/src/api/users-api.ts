@@ -8,7 +8,7 @@ export class UsersApi {
     getCurrentUser = (dispatch: any, user: any) => {
         if (!user.loading) {
             dispatch({type: USER_AUTHORISE_START})
-            client.get("http://127.0.0.1:8010/api/v1/auth/me"
+            client.get("/api/v1/auth/me"
             ).then((data) => {
                 dispatch({
                     type: USER_AUTHORISE_SUCCESS,
@@ -27,7 +27,7 @@ export class UsersApi {
 
     login = (dispatch: any, username: string, password: string, callback: VoidFunction) => {
         dispatch({type: USER_AUTHORISE_START})
-        client.post("http://127.0.0.1:8010/api/v1/auth/login",
+        client.post("/api/v1/auth/login",
             {username: username, password: password}
         ).then((data) => {
             window.localStorage.setItem("sourcer_token", data.access_token)
@@ -52,7 +52,7 @@ export class UsersApi {
     }
     signin = (dispatch: any, firstName: string, lastName: string, email: string, password: string, callback: VoidFunction) => {
         dispatch({type: USER_AUTHORISE_START})
-        client.post("http://127.0.0.1:8010/api/v1/auth/signin",
+        client.post("/api/v1/auth/signin",
             {email: email, password: password, first_name: firstName, last_name: lastName}
         ).then((data) => {
             window.localStorage.setItem("sourcer_token", data.access_token)

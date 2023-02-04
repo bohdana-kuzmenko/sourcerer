@@ -11,6 +11,7 @@ import {
 } from "semantic-ui-react";
 import React, {useState} from "react";
 import {StoragePermissions} from "../storages_permissions";
+import {MIME_TYPES} from "../../../constants";
 
 export const StorageContent = (props: any) => {
     let [activeMetadata, setActiveMetadata] = useState(false);
@@ -32,18 +33,26 @@ export const StorageContent = (props: any) => {
         const images = ['jpg', 'jpeg', 'png']
 
         let extension = key.split('.').slice(-1)[0].toLowerCase()
-        if (images.indexOf(extension) > -1) {
+        // @ts-ignore
+        let mime_type = MIME_TYPES[extension]
+
+        if (mime_type.includes('image')) {
             setOpen(true)
             let link = props.previewContent(key, true)
             setPreviewContent(link);
             setPreviewContentType("image")
-        } else {
-            if (extension.includes('json')) {
-                setOpen(true)
-                let link = JSON.parse(props.previewContent(key))
-                setPreviewContent(link)
-                setPreviewContentType("json")
-            }
+        }
+        if (mime_type.includes('json')) {
+            setOpen(true)
+            let link = JSON.parse(props.previewContent(key))
+            setPreviewContent(link)
+            setPreviewContentType("json")
+        }
+        if (mime_type.includes('audio')) {
+            setOpen(true)
+            let link = props.previewContent(key, true)
+            setPreviewContent(link)
+            setPreviewContentType("audio")
         }
 
 
@@ -153,6 +162,11 @@ export const StorageContent = (props: any) => {
                     { !keyPreviewLoading && previewContentType === 'json' && (
                         <Segment>
                             { previewContent }
+                        </Segment>
+                    ) }
+                    { !keyPreviewLoading && previewContentType === 'audio' && (
+                        <Segment>
+                            <audio  style={{width: '100%'}} controls src={previewContent} />
                         </Segment>
                     ) }
                     { keyPreviewLoading && (

@@ -133,7 +133,7 @@ test_app.db
 
 # ui
 
-sourcerer-ui/node_modules/
+sourcerer/plugins/sourcerer_ui/node_modules/
 
 # Default ignored files
 /shelf/
