@@ -15,6 +15,15 @@ def get_version():
 # with open("README.md", "r") as fh:
 #     long_description = fh.read()
 
+def package_files(directory):
+    paths = []
+    for (path, directories, filenames) in os.walk(directory):
+        for filename in filenames:
+            paths.append(os.path.join('..', path, filename))
+    return paths
+
+extra_files = package_files('sourcerer/plugins/sourcerer_ui')
+
 
 setup(
     name='sourcerer',
@@ -28,7 +37,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,
-    package_data={'': ['sourcerer/plugins/sourcerer_ui/pubic/.*', 'sourcerer/plugins/sourcerer_ui/package.json']},
+    package_data={'': extra_files},
     zip_safe=False,
     platforms='any',
     install_requires=[
