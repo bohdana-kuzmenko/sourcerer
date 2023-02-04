@@ -1,2 +1,4 @@
 include sourcerer/plugins/sourcerer_ui/.*
+include sourcerer/plugins/sourcerer_ui/public/.*
+include sourcerer/plugins/sourcerer_ui/src/.*
 include sourcerer/plugins/sourcerer_ui/package.json
