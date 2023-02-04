@@ -28,6 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(),
     include_package_data=True,
+    package_data={'': ['sourcerer/plugins/sourcerer_ui/*']},
     zip_safe=False,
     platforms='any',
     install_requires=[
