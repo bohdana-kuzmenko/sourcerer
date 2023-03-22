@@ -90,7 +90,7 @@ export default function SettingsPage() {
 
     return (
         <>
-             <SemanticToastContainer className={ "customToast" }/>
+            <SemanticToastContainer className={ "customToast" }/>
             <Menu fixed='top' inverted style={ {backgroundColor: '#011627'} }>
                 <Container>
                     <Menu.Item as='a' onClick={ () => navigate('/storages') }>Home</Menu.Item>

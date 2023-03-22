@@ -54,8 +54,6 @@ export const StorageContent = (props: any) => {
             setPreviewContent(link)
             setPreviewContentType("audio")
         }
-
-
     }
     const handleClick = (e: any, titleProps: any) => {
         setActiveMetadata(!activeMetadata)
