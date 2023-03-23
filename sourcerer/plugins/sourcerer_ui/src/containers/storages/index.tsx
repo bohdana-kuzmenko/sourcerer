@@ -42,6 +42,8 @@ export default function StoragesPage() {
     let [registrationId, setRegistrationId] = useState("");
 
     const selectStorage = (storage: any) => {
+        setSearchString("")
+        setActiveSearchString(false)
         setActiveStorage(storage['storage'])
         setRegistrationId(storage['registration_id'])
         storagesApi.getStorageContent(dispatch, storage['registration_id'], storage['storage'], '')
