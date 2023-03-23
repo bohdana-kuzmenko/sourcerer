@@ -37,6 +37,8 @@ export default function StoragesPage() {
     const storagesApi = new StoragesApi()
 
     let [activeStorage, setActiveStorage] = useState("");
+    let [searchString, setSearchString] = useState("");
+    let [activeSearchString, setActiveSearchString] = useState(false);
     let [registrationId, setRegistrationId] = useState("");
 
     const selectStorage = (storage: any) => {
@@ -49,7 +51,15 @@ export default function StoragesPage() {
         if (path.length > 0) {
             folder = path + folder;
         }
+        setSearchString("")
+        setActiveSearchString(false)
         storagesApi.getStorageContent(dispatch, registrationId, activeStorage, folder)
+    }
+    
+    const onSearchInput = (substring: string) => {
+        setSearchString(substring)
+        setActiveSearchString(true)
+        storagesApi.getStorageContent(dispatch, registrationId, activeStorage, path, substring)
     }
 
     const onPathClick = (pathIndex: number) => {
@@ -57,6 +67,8 @@ export default function StoragesPage() {
         if (folder.length > 0) {
             folder += '/'
         }
+        setSearchString("")
+        setActiveSearchString(false)
         storagesApi.getStorageContent(dispatch, registrationId, activeStorage, folder)
     }
 
@@ -148,8 +160,10 @@ export default function StoragesPage() {
                                 files={ storageContent.files }
                                 path={ path }
                                 keyPreviewLoading={ keyPreviewLoading }
+                                onSearchInput={ onSearchInput }
+                                searchString = { searchString }
+                                activeSearchString={ activeSearchString }
                             />
-
                     }
                 </Grid.Column>
             </Grid>

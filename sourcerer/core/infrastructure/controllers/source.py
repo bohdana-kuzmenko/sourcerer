@@ -54,12 +54,12 @@ class SourceController:
 
         return result
 
-    def list_source_content(self, source_id: int, bucket: str, prefix=None):
+    def list_source_content(self, source_id: int, bucket: str, path: str = "", prefix: str = ""):
         source = self.service.get(source_id)
         remote_service = RemoteSourcesRegistry().get(source.provider)(
             source.credentials.decode("utf-8")
         )
-        return remote_service.list_storage_items(bucket, prefix)
+        return remote_service.list_storage_items(bucket, path, prefix)
 
     def get_storage_permissions(self, source_id, bucket):
         source = self.service.get(source_id)

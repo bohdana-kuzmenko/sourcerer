@@ -45,7 +45,7 @@ class AppleS3RemoteService(BaseRemoteService):
         response = self.client.list_buckets()
         return [i.get("Name") for i in response.get("Buckets")]
 
-    def list_storage_items(self, storage: SourceCredentials, prefix: str):
+    def list_storage_items(self, storage: SourceCredentials, path: str, prefix: str):
         pass
 
     def read_storage_item(self):

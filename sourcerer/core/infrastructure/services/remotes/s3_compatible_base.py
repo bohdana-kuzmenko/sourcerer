@@ -42,20 +42,19 @@ class S3CompatibleBase(BaseRemoteService):
             for i in response.get("Buckets")
         ]
 
-    def list_storage_items(self, storage: str, prefix: str = ""):
-        # ToDo: Exception if storage not exists
+    def list_storage_items(self, storage: str, path: str = "", prefix: str = "", start_after=""):
+        # ToDo: Exception if storage does not exist
         try:
-            result = self.client.list_objects(Bucket=storage, Prefix=prefix, Delimiter="/")
+            result = self.client.list_objects(Bucket=storage, Prefix=path+prefix, Delimiter="/")
         except Exception as ex:
             raise SourceAccessError(ex)
-        folders = [i.get("Prefix").replace(prefix, '') for i in result.get("CommonPrefixes", [])]
+        folders = [i.get("Prefix").replace(path, '') for i in result.get("CommonPrefixes", [])]
         files = [
             {
-                'key': i.get("Key").replace(prefix, ''),
+                'key': i.get("Key").replace(path, ''),
                 'date_modified': i.get("LastModified"),
                 'size': humanize.naturalsize(i.get("Size")),
             }
-
             for i in result.get("Contents", [])]
         return {"folders": folders, "files": files}
 

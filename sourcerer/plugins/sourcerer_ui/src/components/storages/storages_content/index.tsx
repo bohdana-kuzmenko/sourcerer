@@ -7,9 +7,10 @@ import {
     Image,
     Modal,
     Segment,
-    Table
+    Table,
+    Input
 } from "semantic-ui-react";
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {StoragePermissions} from "../storages_permissions";
 import {MIME_TYPES} from "../../../constants";
 
@@ -18,6 +19,9 @@ export const StorageContent = (props: any) => {
     const [open, setOpen] = React.useState(false)
     const [previewContent, setPreviewContent] = React.useState("")
     const [previewContentType, setPreviewContentType] = React.useState("")
+    
+    const searchRef = useRef(null);
+
 
     let path = props.path
     let files = props.files
@@ -26,6 +30,9 @@ export const StorageContent = (props: any) => {
     let permissions = props.permissions
     let onFolderSelect = props.onFolderSelect
     let onDownloadKey = props.onDownloadKey
+    let searchString = props.searchString
+    let activeSearchString = props.activeSearchString
+    let onSearchInput = props.onSearchInput
     let onDeleteKey = props.onDeleteKey
     let keyPreviewLoading = props.keyPreviewLoading
 
@@ -58,7 +65,13 @@ export const StorageContent = (props: any) => {
     const handleClick = (e: any, titleProps: any) => {
         setActiveMetadata(!activeMetadata)
     }
-
+    
+     useEffect(() => {
+         if (activeSearchString) {
+             // @ts-ignore
+             searchRef.current.focus()
+         }
+      });
 
     let changePath = (event: any, pathIndex: number) => {
         props.onPathClick(pathIndex)
@@ -107,6 +120,16 @@ export const StorageContent = (props: any) => {
                     <StoragePermissions permissions={ permissions }/>
                 </Accordion.Content>
             </Accordion>
+            
+             <Input 
+                 ref={searchRef}
+                 placeholder='Search...' 
+                 focus={activeSearchString}
+                 fluid 
+                 icon='search'  
+                 value={searchString} 
+                 onChange={(e: any) => onSearchInput(e.target.value) }
+             />
 
             <Table selectable padded basic='very'>
                 <Table.Body>

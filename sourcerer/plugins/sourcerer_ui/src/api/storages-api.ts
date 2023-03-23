@@ -41,11 +41,16 @@ export class StoragesApi {
         ;
     }
 
-    getStorageContent = (dispatch: any, registrationId: string, storageName: string, path: string) => {
+    getStorageContent = (dispatch: any, registrationId: string, storageName: string, path: string, search?: string) => {
         dispatch({type: GET_STORAGES_CONTENT_START})
 
-        const params = new URLSearchParams({path: path});
-        client.get(`/api/v1/registrations/${ registrationId }/storages/${ storageName }?` + params
+        let params = {path: path}
+        if (search !== undefined) {
+            // @ts-ignore
+            params['prefix'] = search
+        }
+        const inlineParams = new URLSearchParams(params);
+        client.get(`/api/v1/registrations/${ registrationId }/storages/${ storageName }?` + inlineParams
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_CONTENT_SUCCESS,

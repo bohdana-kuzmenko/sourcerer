@@ -35,12 +35,12 @@ def storages(registration_id, user: PydanticUser = Depends(get_current_user)):
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}")
-def storages(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
+def storages(registration_id, storage_name, path: str = "", prefix: str = "",user: PydanticUser = Depends(get_current_user)):
     """
     Get list of available storages for credentials registration
     :return:
     """
-    return source_controller.list_source_content(registration_id, storage_name, path)
+    return source_controller.list_source_content(registration_id, storage_name, path, prefix)
 
 
 @router.get("/registrations/{registration_id}/storages/{storage_name}/permissions")

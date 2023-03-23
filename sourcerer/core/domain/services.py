@@ -25,7 +25,7 @@ class BaseRemoteService(BaseService):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def list_storage_items(self, storage: str, prefix: str):
+    def list_storage_items(self, storage: str, path: str, prefix: str):
         raise NotImplementedError
 
     @abc.abstractmethod
