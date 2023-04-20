@@ -1,0 +1,35 @@
+.storage-name {
+    height: 30px;
+    line-height: 30px;
+    margin-left: -30px;
+    padding-left: 30px;
+    border-radius: 30px;
+}
+
+.storage-name.active {
+    background-color: orange;
+
+}
+
+.storage-name:hover {
+    cursor: pointer;
+    background-color: rgb(229, 229, 229, 40%);
+}
+
+.storage-name.active:hover {
+    cursor: pointer;
+    background-color: orange;
+}
+
+.folder-name:hover {
+    cursor: pointer;
+}
+
+.file-row:hover {
+    cursor: pointer;
+}
+
+
+.pointer:hover {
+    cursor: pointer;
+}
