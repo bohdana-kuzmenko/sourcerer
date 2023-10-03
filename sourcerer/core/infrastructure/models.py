@@ -24,12 +24,11 @@ class User(Base):
     last_name = Column(String(100), nullable=False, server_default="")
 
 
-class SourceCredentials(Base):
-    __tablename__ = "source"
+class Credentials(Base):
+    __tablename__ = "credentials"
     id = Column(Integer, primary_key=True)
     provider = Column(Enum(SourceProvidersEnum), nullable=False)
-    # credentials = Column(String, nullable=False)  # ToDo should be encrypted
-    credentials = Column(EncryptedType(String, encryption_key), nullable=False)  # ToDo should be encrypted
+    credentials = Column(EncryptedType(String, encryption_key), nullable=False)
     active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
@@ -37,7 +36,7 @@ class SourceCredentials(Base):
 
 
 PydanticUserBase = sqlalchemy_to_pydantic(User)
-PydanticSourceCredentials = sqlalchemy_to_pydantic(SourceCredentials)
+PydanticSourceCredentials = sqlalchemy_to_pydantic(Credentials)
 
 
 class PydanticUser(PydanticUserBase):

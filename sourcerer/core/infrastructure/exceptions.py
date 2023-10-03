@@ -1,4 +1,4 @@
-from sourcerer.core.domain.exceptions import SourcerBaseException
+from sourcerer.core.domain.exceptions import SourcerBaseException, BaseUsersException
 
 
 class SourceAccessError(SourcerBaseException):
@@ -10,4 +10,8 @@ class AWSConfigurationError(SourcerBaseException):
 
 
 class BLOBBYConfigurationError(AWSConfigurationError):
+    pass
+
+
+class UserNotFoundException(BaseUsersException):
     pass

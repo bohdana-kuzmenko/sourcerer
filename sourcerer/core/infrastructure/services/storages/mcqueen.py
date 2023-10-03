@@ -1,8 +1,8 @@
 import boto3
 
 from sourcerer.core.infrastructure.exceptions import BLOBBYConfigurationError
-from sourcerer.core.infrastructure.models import SourceCredentials, SourceProvidersEnum
-from sourcerer.core.infrastructure.services.remotes.s3_compatible_base import S3CompatibleBase
+from sourcerer.core.infrastructure.models import Credentials, SourceProvidersEnum
+from sourcerer.core.infrastructure.services.storages.s3_compatible_base import S3CompatibleBase
 
 ENDPOINT_URL = "https://store-030.blobstore.apple.com"
 REGION = "store-030"
@@ -12,7 +12,7 @@ def add_xml_header(params, **kwargs):
     params['headers']['Accept'] = 'application/xml'
 
 
-class McQueenRemoteService(S3CompatibleBase):
+class McQueenService(S3CompatibleBase):
     def __init__(self, credentials):
         aws_access_key_id, aws_secret_access_key, endpoint_url, region = self.parse_credentials(
             credentials
@@ -51,7 +51,7 @@ class McQueenRemoteService(S3CompatibleBase):
     @classmethod
     def create(cls, params, owner, registered_source_service):
         credentials: dict = params.get('credentials')
-        source = SourceCredentials(
+        source = Credentials(
             provider=cls.kind(),
             credentials=" ".join(
                 [

@@ -5,13 +5,13 @@ import boto3
 import xml.etree.ElementTree as et
 
 from sourcerer.core.infrastructure.exceptions import BLOBBYConfigurationError
-from sourcerer.core.infrastructure.models import SourceCredentials, SourceProvidersEnum
-from sourcerer.core.infrastructure.services.remotes.s3_compatible_base import S3CompatibleBase
+from sourcerer.core.infrastructure.models import Credentials, SourceProvidersEnum
+from sourcerer.core.infrastructure.services.storages.s3_compatible_base import S3CompatibleBase
 
 ENDPOINT_URL = "https://blob.mr3.simcloud.apple.com"
 
 
-class BlobbyRemoteService(S3CompatibleBase):
+class BlobbyService(S3CompatibleBase):
 
     def __init__(self, credentials):
         aws_access_key_id, aws_secret_access_key, endpoint_url = self.parse_credentials(
@@ -47,7 +47,7 @@ class BlobbyRemoteService(S3CompatibleBase):
     @classmethod
     def create(cls, params, owner, registered_source_service):
         credentials: dict = params.get('credentials')
-        source = SourceCredentials(
+        source = Credentials(
             provider=cls.kind(),
             credentials=" ".join(
                 [

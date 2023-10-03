@@ -2,11 +2,11 @@ from itertools import groupby
 
 import humanize
 
-from sourcerer.core.domain.services import BaseRemoteService
+from sourcerer.core.domain.services import BaseStorageService
 from sourcerer.core.infrastructure.exceptions import SourceAccessError
 
 
-class S3CompatibleBase(BaseRemoteService):
+class S3CompatibleBase(BaseStorageService):
 
     @property
     def client(self):

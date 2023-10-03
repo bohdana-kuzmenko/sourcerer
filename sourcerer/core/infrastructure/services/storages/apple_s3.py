@@ -1,10 +1,10 @@
-from sourcerer.core.domain.services import BaseRemoteService
+from sourcerer.core.domain.services import BaseStorageService
 import boto3
 
-from sourcerer.core.infrastructure.models import SourceCredentials, SourceProvidersEnum
+from sourcerer.core.infrastructure.models import Credentials, SourceProvidersEnum
 
 
-class AppleS3RemoteService(BaseRemoteService):
+class AppleS3Service(BaseStorageService):
 
     def __init__(self, credentials):
         aws_access_key_id, aws_secret_access_key, endpoint_url = self.parse_credentials(
@@ -25,7 +25,7 @@ class AppleS3RemoteService(BaseRemoteService):
 
     @classmethod
     def create(cls, params, registered_source_service):
-        source = SourceCredentials(
+        source = Credentials(
             provider=cls.kind(),
             credentials=" ".join(
                 [
@@ -45,7 +45,7 @@ class AppleS3RemoteService(BaseRemoteService):
         response = self.client.list_buckets()
         return [i.get("Name") for i in response.get("Buckets")]
 
-    def list_storage_items(self, storage: SourceCredentials, path: str, prefix: str):
+    def list_storage_items(self, storage: Credentials, path: str, prefix: str):
         pass
 
     def read_storage_item(self):

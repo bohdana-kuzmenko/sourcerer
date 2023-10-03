@@ -16,5 +16,4 @@ def register_exc_handler(app):
     @app.exception_handler(Exception)
     def handle_validation_exc(request: Request, exc):
         base_error_message = f"Failed to execute: {request.method}: {request.url}"
-        # Change here to LOGGER
         return JSONResponse(status_code=400, content={"message": f"{base_error_message}. Detail: {exc}"})
