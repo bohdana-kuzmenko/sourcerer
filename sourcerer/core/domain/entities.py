@@ -11,19 +11,6 @@ class BaseSource(BaseEntity):
     pass
 
 
-class User(BaseEntity):
-    def register(
-        self,
-    ):
-        raise NotImplemented
-
-    def update(self):
-        raise NotImplemented
-
-    def delete(self):
-        raise NotImplemented
-
-
 class StoragesRegistry(dict):
     _instance = None
 
