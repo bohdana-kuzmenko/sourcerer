@@ -35,7 +35,6 @@ class DataProviderController:
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.delete_storage_item(bucket, key)
 
-
     def list_storages(self, data_provider_credentials_id: int = None, user: PydanticUser = None):
         if data_provider_credentials_id:
             # todo: add check for ownership
