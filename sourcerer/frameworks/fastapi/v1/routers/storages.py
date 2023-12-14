@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from sourcerer.core.infrastructure.models import PydanticUser
+from sourcerer.core.infrastucture.user.models import PydanticUser
 from sourcerer.frameworks.fastapi.v1.routers.base import V1APIRouter
 from sourcerer.frameworks.fastapi.v1.config import storages_controller, credentials_controller
 from sourcerer.frameworks.fastapi.v1.routers.users import get_current_user

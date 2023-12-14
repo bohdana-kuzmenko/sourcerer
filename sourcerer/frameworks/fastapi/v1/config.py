@@ -1,13 +1,13 @@
-from sourcerer.core.infrastructure.controllers.credentials import CredentialsController
-from sourcerer.core.infrastructure.controllers.storages import StoragesController
-from sourcerer.core.infrastructure.controllers.users import UsersController
-from sourcerer.core.infrastructure.services.credentials import RegisteredCredentialsService
-from sourcerer.core.infrastructure.services.users import UsersService
+from sourcerer.core.infrastucture.data_provider.controllers import DataProviderController
+from sourcerer.core.infrastucture.data_provider_credentials.controllers import DataProviderCredentialsController
+from sourcerer.core.infrastucture.data_provider_credentials.services import DataProviderCredentialsService
+from sourcerer.core.infrastucture.user.controllers import UsersController
+from sourcerer.core.infrastucture.user.services import UsersService
 from sourcerer.frameworks.fastapi.config import app
 
-source_service = RegisteredCredentialsService(app.db)
-credentials_controller = CredentialsController(source_service)
-storages_controller = StoragesController(source_service)
+source_service = DataProviderCredentialsService(app.db)
+credentials_controller = DataProviderCredentialsController(source_service)
+storages_controller = DataProviderController(source_service)
 
 users_service = UsersService(app.db)
 users_controller = UsersController(users_service)

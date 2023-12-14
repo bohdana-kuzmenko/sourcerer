@@ -1,5 +1,5 @@
-from sourcerer.core.infrastructure.models import PydanticUser
-from sourcerer.core.infrastructure.services.users import BaseUsersService
+from sourcerer.core.domain.user.services import BaseUsersService
+from sourcerer.core.infrastucture.user.models import PydanticUser
 
 
 class UsersController:

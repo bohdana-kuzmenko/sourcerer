@@ -7,7 +7,7 @@ from jose import jwt, JWTError
 from pydantic import BaseModel
 from starlette import status
 
-from sourcerer.core.infrastructure.models import PydanticUser, PydanticUserBase
+from sourcerer.core.infrastucture.user.models import PydanticUserBase
 from sourcerer.frameworks.fastapi.v1.config import users_controller
 from sourcerer.frameworks.fastapi.config import SECRET_KEY, ALGORITHM
 

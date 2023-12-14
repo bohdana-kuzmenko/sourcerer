@@ -1,7 +1,7 @@
-from sourcerer.core.domain.services import  BaseUsersService
-from sourcerer.core.infrastructure.exceptions import UserNotFoundException
-from sourcerer.core.infrastructure.models import PydanticUser, User, PydanticUserBase
-from sourcerer.core.infrastructure.services.crypto_hash import CryptoHasher
+from sourcerer.core.domain.user.services import BaseUsersService
+from sourcerer.core.infrastucture.user.exceptions import UserNotFoundException
+from sourcerer.core.infrastucture.user.models import PydanticUser, PydanticUserBase, User
+from sourcerer.core.infrastucture.user.utils import CryptoHasher
 
 
 class UsersService(BaseUsersService):

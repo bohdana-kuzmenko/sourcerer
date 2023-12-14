@@ -1,28 +1,19 @@
-from sourcerer.core.domain.entities import StoragesRegistry
-from sourcerer.core.infrastructure.models import PydanticSourceCredentials, PydanticUser
-from sourcerer.core.infrastructure.services.credentials import RegisteredCredentialsService
+from sourcerer.core.domain.data_provider.entities import DataProviderRegistry
+
+from sourcerer.core.infrastucture.data_provider_credentials.models import PydanticDataProviderCredentials
+from sourcerer.core.infrastucture.data_provider_credentials.services import DataProviderCredentialsService
+from sourcerer.core.infrastucture.data_provider_credentials.utils import StorageConfigurationErrorHandler
+from sourcerer.core.infrastucture.user.models import PydanticUser
 
 
-class StorageConfigurationErrorHandler:
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        if exc_val:
-            print(exc_type)
-            print(exc_val)
-            print(exc_tb)
-        return True
-
-
-class CredentialsController:
-    def __init__(self, service: RegisteredCredentialsService):
+class DataProviderCredentialsController:
+    def __init__(self, service: DataProviderCredentialsService):
         self.service = service
 
-    def add(self, params: PydanticSourceCredentials, user: PydanticUser):
+    def add(self, params: PydanticDataProviderCredentials, user: PydanticUser):
         if "provider" not in params.dict():
             return "fail"
-        StoragesRegistry().get(params.provider).create(params.dict(), user, self.service)
+        DataProviderRegistry().get(params.provider).create(params.dict(), user, self.service)
 
     def list(self, user):
         return self.service.list(user.id, exclude_inactive=False)
@@ -46,7 +37,7 @@ class CredentialsController:
         result = []
         for source in sources:
             with StorageConfigurationErrorHandler():
-                remote_service = StoragesRegistry().get(source.provider)(
+                remote_service = DataProviderRegistry().get(source.provider)(
                     source.credentials.decode("utf-8")
                 )
                 result.extend([{**i, "registration_id": source.id} for i in remote_service.list_storages()])
@@ -55,7 +46,7 @@ class CredentialsController:
 
     def list_storage_content(self, source_id: int, bucket: str, path: str = "", prefix: str = ""):
         source = self.service.get(source_id)
-        remote_service = StoragesRegistry().get(source.provider)(
+        data_provider_service = DataProviderRegistry().get(source.provider)(
             source.credentials.decode("utf-8")
         )
-        return remote_service.list_storage_items(bucket, path, prefix)
+        return data_provider_service.list_storage_items(bucket, path, prefix)
