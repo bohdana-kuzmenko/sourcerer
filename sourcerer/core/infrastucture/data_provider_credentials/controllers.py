@@ -37,10 +37,10 @@ class DataProviderCredentialsController:
         result = []
         for source in sources:
             with StorageConfigurationErrorHandler():
-                remote_service = DataProviderRegistry().get(source.provider)(
+                data_provider_service = DataProviderRegistry().get(source.provider)(
                     source.credentials.decode("utf-8")
                 )
-                result.extend([{**i, "registration_id": source.id} for i in remote_service.list_storages()])
+                result.extend([{**i, "registration_id": source.id} for i in data_provider_service.list_storages()])
 
         return result
 
