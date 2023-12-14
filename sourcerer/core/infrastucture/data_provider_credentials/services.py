@@ -1,5 +1,5 @@
 from sourcerer.core.domain.data_provider_credentials.services import BaseDataProviderCredentialService
-from sourcerer.core.infrastucture.data_provider_credentials.exceptions import SourceNotFoundException
+from sourcerer.core.infrastucture.data_provider.exceptions import SourceNotFoundException
 from sourcerer.core.infrastucture.data_provider_credentials.models import PydanticDataProviderCredentials, Credentials
 
 

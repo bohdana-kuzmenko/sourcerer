@@ -12,3 +12,6 @@ class AWSConfigurationError(DataProviderBaseException):
 class BLOBBYConfigurationError(AWSConfigurationError):
     pass
 
+
+class SourceNotFoundException(DataProviderBaseException):
+    pass

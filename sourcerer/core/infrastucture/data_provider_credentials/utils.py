@@ -1,3 +1,6 @@
+import traceback
+
+
 class StorageConfigurationErrorHandler:
     def __enter__(self):
         return self
@@ -6,5 +9,5 @@ class StorageConfigurationErrorHandler:
         if exc_val:
             print(exc_type)
             print(exc_val)
-            print(exc_tb)
+            print(traceback.format_exception(exc_type, exc_val, exc_tb))
         return True
