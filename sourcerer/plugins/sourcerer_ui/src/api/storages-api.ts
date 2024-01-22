@@ -1,16 +1,13 @@
-import {useDispatch} from "react-redux";
-import {USER_AUTHORISE_FAILED, USER_AUTHORISE_START, USER_AUTHORISE_SUCCESS} from "../redux/actions/auth";
 import {client} from "./client";
 import {
     DELETE_KEY_FAILED,
     DELETE_KEY_START,
     DELETE_KEY_SUCCESS,
-    GET_KEY_DOWNLOAD_URL_FAILED,
-    GET_KEY_DOWNLOAD_URL_START,
-    GET_KEY_DOWNLOAD_URL_SUCCESS,
     GET_KEY_PREVIEW_START,
-    GET_KEY_PREVIEW_SUCCESS, GET_KEY_UPLOAD_FAILED,
-    GET_KEY_UPLOAD_START, GET_KEY_UPLOAD_SUCCESS,
+    GET_KEY_PREVIEW_SUCCESS,
+    GET_KEY_UPLOAD_FAILED,
+    GET_KEY_UPLOAD_START,
+    GET_KEY_UPLOAD_SUCCESS,
     GET_STORAGES_CONTENT_FAILED,
     GET_STORAGES_CONTENT_START,
     GET_STORAGES_CONTENT_SUCCESS,
@@ -105,30 +102,25 @@ export class StoragesApi {
         dispatch({type: GET_KEY_PREVIEW_SUCCESS})
         return result
     };
-    uploadFile = (dispatch: any, registrationId: string, storageName: string, path: string, key: string, file:any) => {
+    uploadFile = (dispatch: any, registrationId: string, storageName: string, path: string, key: string, file: any) => {
         dispatch({type: GET_KEY_UPLOAD_START})
-        console.log(file)
         const params = new URLSearchParams({path: path});
         const url = `/api/v1/registrations/${ registrationId }/storages/${ storageName }/upload?${ params }`
         const request = new XMLHttpRequest();
         request.open('POST', url, false);  // `false` makes the request synchronous
         request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
         request.onload = () => {
-          if (request.status === 200) {
-            dispatch({type: GET_KEY_UPLOAD_SUCCESS})
-          }
+            if (request.status === 200) {
+                dispatch({type: GET_KEY_UPLOAD_SUCCESS});
+                this.getStorageContent(dispatch, registrationId, storageName, path)
+            }
         };
         request.onerror = () => {
-          dispatch({type: GET_KEY_UPLOAD_FAILED})
+            dispatch({type: GET_KEY_UPLOAD_FAILED})
         };
         var formData = new FormData();
         formData.append("file", file);
-        // xhr.send(formData);
         request.send(formData);
-        
-        
-        
-        // return 'ok'
     };
 
     getKeyContent = (dispatch: any, registrationId: string, storageName: string, path: string) => {
@@ -147,12 +139,12 @@ export class StoragesApi {
     deleteKey = (dispatch: any, registrationId: string, storageName: string, path: string, key: string) => {
         let self = this
         dispatch({type: DELETE_KEY_START})
-        const params = new URLSearchParams({path: path+key});
+        const params = new URLSearchParams({path: path + key});
         client.delete(`/api/v1/registrations/${ registrationId }/storages/${ storageName }?${ params }`
         ).then((data) => {
             dispatch({
                 type: DELETE_KEY_SUCCESS,
-                payload : {}
+                payload: {}
             })
             self.getStorageContent(dispatch, registrationId, storageName, path)
 
