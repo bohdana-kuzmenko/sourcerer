@@ -178,15 +178,6 @@ export default function SettingsPage() {
                             placeholder={ "AWS Secret Access Key" }
                         />
                         <InputField
-                            condition={ S3_COMPATIBLE_BUCKETS.indexOf(provider) > -1 }
-                            onChange={ (event: any) => setFormData({
-                                ...formData,
-                                endpoint_url: event.target.value,
-                            }) }
-                            label={ "Endpoint url" }
-                            placeholder={ "Endpoint url" }
-                        />
-                        <InputField
                             condition={ ["MCQUEEN"].indexOf(provider) > -1 }
                             onChange={ (event: any) => setFormData({
                                 ...formData,

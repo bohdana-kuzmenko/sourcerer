@@ -8,15 +8,20 @@ import {
     Modal,
     Segment,
     Table,
-    Input
+    Input, GridRow, GridColumn, Button
 } from "semantic-ui-react";
 import React, {useEffect, useRef, useState} from "react";
 import {StoragePermissions} from "../storages_permissions";
 import {MIME_TYPES} from "../../../constants";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+
 
 export const StorageContent = (props: any) => {
     let [activeMetadata, setActiveMetadata] = useState(false);
     const [open, setOpen] = React.useState(false)
+    const [previewKey, setPreviewKey] = React.useState("")
     const [previewContent, setPreviewContent] = React.useState("")
     const [previewContentType, setPreviewContentType] = React.useState("")
     
@@ -35,6 +40,7 @@ export const StorageContent = (props: any) => {
     let onSearchInput = props.onSearchInput
     let onDeleteKey = props.onDeleteKey
     let keyPreviewLoading = props.keyPreviewLoading
+    let uploadFile = props.uploadFile
 
     const onPreviewOpen = (key: string) => {
         const images = ['jpg', 'jpeg', 'png']
@@ -43,21 +49,47 @@ export const StorageContent = (props: any) => {
         // @ts-ignore
         let mime_type = MIME_TYPES[extension]
 
+        console.log(extension)
+        console.log(mime_type)
         if (mime_type.includes('image')) {
             setOpen(true)
             let link = props.previewContent(key, true)
+            setPreviewKey(key);
             setPreviewContent(link);
             setPreviewContentType("image")
         }
         if (mime_type.includes('json')) {
             setOpen(true)
             let link = JSON.parse(props.previewContent(key))
+            setPreviewKey(key);
             setPreviewContent(link)
             setPreviewContentType("json")
+        }
+        if (mime_type.includes('xml')) {
+            setOpen(true)
+            let link = JSON.parse(props.previewContent(key))
+            setPreviewKey(key);
+            setPreviewContent(link)
+            setPreviewContentType("xml")
+        }
+        if (mime_type.includes('text')) {
+            setOpen(true)
+            let link = JSON.parse(props.previewContent(key))
+            setPreviewKey(key);
+            setPreviewContent(link)
+            setPreviewContentType("text")
+        }
+        if (mime_type.includes('yaml')) {
+            setOpen(true)
+            let link = JSON.parse(props.previewContent(key))
+            setPreviewKey(key);
+            setPreviewContent(link)
+            setPreviewContentType("yaml")
         }
         if (mime_type.includes('audio')) {
             setOpen(true)
             let link = props.previewContent(key, true)
+            setPreviewKey(key);
             setPreviewContent(link)
             setPreviewContentType("audio")
         }
@@ -121,15 +153,25 @@ export const StorageContent = (props: any) => {
                 </Accordion.Content>
             </Accordion>
             
-             <Input 
-                 ref={searchRef}
-                 placeholder='Search...' 
-                 focus={activeSearchString}
-                 fluid 
-                 icon='search'  
-                 value={searchString} 
-                 onChange={(e: any) => onSearchInput(e.target.value) }
-             />
+            <Grid columns={2}>
+            <GridRow>
+                <GridColumn width={15}>
+                     <Input 
+                         ref={searchRef}
+                         placeholder='Search...' 
+                         focus={activeSearchString}
+                         fluid 
+                         icon='search'  
+                         value={searchString} 
+                         onChange={(e: any) => onSearchInput(e.target.value) }
+                     />
+                </GridColumn>
+                <GridColumn width={1}>
+                    <Button as="label" htmlFor="file" type="button" basic icon='upload'/>
+                    <input type="file" id="file" style={{ display: "none" }} onChange={uploadFile} />
+                </GridColumn>
+            </GridRow>  
+                </Grid>
 
             <Table selectable padded basic='very'>
                 <Table.Body>
@@ -175,14 +217,35 @@ export const StorageContent = (props: any) => {
                 onClose={ () => setOpen(false) }
                 onOpen={ () => setOpen(true) }
             >
-                <Modal.Header>Preview { previewContentType }</Modal.Header>
+                <Modal.Header>Preview { previewKey}</Modal.Header>
                 <Modal.Content image={ !keyPreviewLoading && previewContentType === 'image' }>
                     { !keyPreviewLoading && previewContentType === 'image' && (
                         <Image src={ previewContent }/>
                     ) }
                     { !keyPreviewLoading && previewContentType === 'json' && (
                         <Segment>
+                            <SyntaxHighlighter language="json" style={tomorrow}>
+                                {previewContent}
+                            </SyntaxHighlighter>
+                        </Segment>
+                    ) }
+                    { !keyPreviewLoading && previewContentType === 'xml' && (
+                        <Segment>
+                            <SyntaxHighlighter language="xml" style={tomorrow}>
+                                {previewContent}
+                            </SyntaxHighlighter>
+                        </Segment>
+                    ) }
+                    { !keyPreviewLoading && previewContentType === 'text' && (
+                        <Segment>
                             { previewContent }
+                        </Segment>
+                    ) }
+                    { !keyPreviewLoading && previewContentType === 'yaml' && (
+                        <Segment>
+                             <SyntaxHighlighter language="yaml" style={tomorrow}>
+                                {previewContent}
+                              </SyntaxHighlighter>
                         </Segment>
                     ) }
                     { !keyPreviewLoading && previewContentType === 'audio' && (

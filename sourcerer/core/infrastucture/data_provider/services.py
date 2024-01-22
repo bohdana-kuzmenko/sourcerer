@@ -1,10 +1,13 @@
+import os.path
 import xml.etree.ElementTree as et
 from itertools import groupby
+from tempfile import NamedTemporaryFile
 
 import boto3
 import humanize
 import requests
 from botocore.config import Config
+from starlette.datastructures import UploadFile
 
 from sourcerer.core.domain.data_provider.services import BaseDataProviderService
 from sourcerer.core.infrastucture.data_provider.entities import DataProvidersEnum
@@ -85,6 +88,25 @@ class S3Base(BaseDataProviderService):
             ExpiresIn=expiration
         )
 
+    def upload(self, storage: str, path, file: UploadFile):
+        temp = NamedTemporaryFile(delete=False)
+        try:
+            try:
+                contents = file.file.read()
+                with temp as f:
+                    f.write(contents)
+            except Exception:
+                raise
+            finally:
+                file.file.close()
+            print(f"Upload file to {storage} {os.path.join(path, file.filename)}")
+            self.client.upload_file(temp.name, storage, os.path.join(path, file.filename))
+        except Exception:
+            raise
+        finally:
+            os.remove(temp.name)  # Delete temp file
+        return {"filename": file.filename}
+
     def get_storage_permissions(self, storage: str):
 
         try:
@@ -105,7 +127,7 @@ class McQueenService(S3Base):
     REGION = "store-030"
 
     def __init__(self, credentials):
-        aws_access_key_id, aws_secret_access_key, endpoint_url, region = self.parse_credentials(
+        aws_access_key_id, aws_secret_access_key, region = self.parse_credentials(
             credentials
         )
         self.mcqueen_endpoint = self.ENDPOINT_URL
@@ -119,9 +141,9 @@ class McQueenService(S3Base):
         )
         try:
             self._client = self.session.client(
-                "s3", endpoint_url=endpoint_url, region_name=region, verify=False)
+                "s3", endpoint_url=self.ENDPOINT_URL, region_name=region, verify=False)
             self._resource = self.session.resource(
-                "s3", endpoint_url=endpoint_url, region_name=region, verify=False
+                "s3", endpoint_url=self.ENDPOINT_URL, region_name=region, verify=False
             )
             self.client.meta.events.register('before-call.s3.ListObjects', add_xml_header)
 
@@ -149,7 +171,6 @@ class McQueenService(S3Base):
                 [
                     credentials.get("secret_access_key", ""),
                     credentials.get("access_key", ""),
-                    credentials.get("endpoint_url", cls.ENDPOINT_URL),
                     credentials.get("region", cls.REGION),
                 ]
             ),
@@ -159,17 +180,15 @@ class McQueenService(S3Base):
         data_provider_credentials_service.create(source)
 
     def parse_credentials(self, credentials):
-        aws_secret_access_key, aws_access_key_id, endpoint_url, region = credentials.split()
-        return aws_access_key_id, aws_secret_access_key, endpoint_url, region
+        aws_secret_access_key, aws_access_key_id, region = credentials.split()
+        return aws_access_key_id, aws_secret_access_key, region
 
 
 class BlobbyService(S3Base):
     ENDPOINT_URL = "https://blob.mr3.simcloud.apple.com"
 
     def __init__(self, credentials):
-        aws_access_key_id, aws_secret_access_key, endpoint_url = self.parse_credentials(
-            credentials
-        )
+        aws_access_key_id, aws_secret_access_key = self.parse_credentials(credentials)
         self.blobby_endpoint = self.ENDPOINT_URL
         self.aws_secret_access_key = aws_secret_access_key
         self.aws_access_key_id = aws_access_key_id
@@ -178,9 +197,9 @@ class BlobbyService(S3Base):
             aws_access_key_id=aws_access_key_id,
         )
         try:
-            self._client = self.session.client("s3", endpoint_url=endpoint_url, verify=False)
+            self._client = self.session.client("s3", endpoint_url=self.ENDPOINT_URL, verify=False)
             self._resource = self.session.resource(
-                "s3", endpoint_url=endpoint_url, verify=False
+                "s3", endpoint_url=self.ENDPOINT_URL, verify=False
             )
         except Exception as ex:
             raise BLOBBYConfigurationError(ex)
@@ -206,7 +225,6 @@ class BlobbyService(S3Base):
                 [
                     credentials.get("secret_access_key", ""),
                     credentials.get("access_key", ""),
-                    credentials.get("endpoint_url", cls.ENDPOINT_URL),
                 ]
             ),
             owner_id=owner.id,
@@ -230,8 +248,8 @@ class BlobbyService(S3Base):
             aws_secret_access_key=temp_secret)
 
     def parse_credentials(self, credentials):
-        aws_secret_access_key, aws_access_key_id, endpoint_url = credentials.split()
-        return aws_access_key_id, aws_secret_access_key, endpoint_url
+        aws_secret_access_key, aws_access_key_id = credentials.split()
+        return aws_access_key_id, aws_secret_access_key
 
     def get_download_url(self, storage: str, key: str, expiration: int = 600):
         session = self.generate_tmp_session(storage, key)

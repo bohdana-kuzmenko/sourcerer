@@ -27,6 +27,10 @@ class DataProviderController:
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.get_download_url(bucket, key)
 
+    def upload(self, data_provider_credentials_id, bucket, path, file):
+        data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
+        return data_provider_service.upload(bucket, path, file)
+
     def preview_data(self, data_provider_credentials_id, bucket, key):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.read_storage_item(bucket, key)

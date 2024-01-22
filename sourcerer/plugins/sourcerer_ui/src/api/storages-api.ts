@@ -3,9 +3,14 @@ import {USER_AUTHORISE_FAILED, USER_AUTHORISE_START, USER_AUTHORISE_SUCCESS} fro
 import {client} from "./client";
 import {
     DELETE_KEY_FAILED,
-    DELETE_KEY_START, DELETE_KEY_SUCCESS,
+    DELETE_KEY_START,
+    DELETE_KEY_SUCCESS,
     GET_KEY_DOWNLOAD_URL_FAILED,
-    GET_KEY_DOWNLOAD_URL_START, GET_KEY_DOWNLOAD_URL_SUCCESS, GET_KEY_PREVIEW_START, GET_KEY_PREVIEW_SUCCESS,
+    GET_KEY_DOWNLOAD_URL_START,
+    GET_KEY_DOWNLOAD_URL_SUCCESS,
+    GET_KEY_PREVIEW_START,
+    GET_KEY_PREVIEW_SUCCESS, GET_KEY_UPLOAD_FAILED,
+    GET_KEY_UPLOAD_START, GET_KEY_UPLOAD_SUCCESS,
     GET_STORAGES_CONTENT_FAILED,
     GET_STORAGES_CONTENT_START,
     GET_STORAGES_CONTENT_SUCCESS,
@@ -99,6 +104,31 @@ export class StoragesApi {
         let result = JSON.parse(request.responseText)
         dispatch({type: GET_KEY_PREVIEW_SUCCESS})
         return result
+    };
+    uploadFile = (dispatch: any, registrationId: string, storageName: string, path: string, key: string, file:any) => {
+        dispatch({type: GET_KEY_UPLOAD_START})
+        console.log(file)
+        const params = new URLSearchParams({path: path});
+        const url = `/api/v1/registrations/${ registrationId }/storages/${ storageName }/upload?${ params }`
+        const request = new XMLHttpRequest();
+        request.open('POST', url, false);  // `false` makes the request synchronous
+        request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
+        request.onload = () => {
+          if (request.status === 200) {
+            dispatch({type: GET_KEY_UPLOAD_SUCCESS})
+          }
+        };
+        request.onerror = () => {
+          dispatch({type: GET_KEY_UPLOAD_FAILED})
+        };
+        var formData = new FormData();
+        formData.append("file", file);
+        // xhr.send(formData);
+        request.send(formData);
+        
+        
+        
+        // return 'ok'
     };
 
     getKeyContent = (dispatch: any, registrationId: string, storageName: string, path: string) => {

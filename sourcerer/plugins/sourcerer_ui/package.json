@@ -17,6 +17,7 @@
     "react-router-dom": "^6.4.5",
     "react-scripts": "5.0.1",
     "react-semantic-toasts": "^0.6.6",
+    "react-syntax-highlighter": "^15.5.0",
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.4",
     "typescript": "^4.9.3",
@@ -48,6 +49,7 @@
   },
   "devDependencies": {
     "@artsy/fresnel": "^6.1.0",
-    "@reduxjs/toolkit": "^1.9.1"
+    "@reduxjs/toolkit": "^1.9.1",
+    "@types/react-syntax-highlighter": "^15.5.11"
   }
 }

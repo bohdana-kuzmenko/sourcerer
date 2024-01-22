@@ -1,5 +1,7 @@
 import abc
 
+from starlette.datastructures import UploadFile
+
 from sourcerer.core.domain.services import BaseService
 
 
@@ -37,13 +39,13 @@ class BaseDataProviderService(BaseService):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def put_storage_item(self):
-        raise NotImplementedError
-
-    @abc.abstractmethod
     def delete_storage_item(self, storage: str, key: str):
         raise NotImplementedError
 
     @abc.abstractmethod
     def get_download_url(self, storage: str, key: str, expiration: int = 600):
+        raise NotImplementedError
+
+    @abc.abstractmethod
+    def upload(self, storage: str, path: str, file: UploadFile):
         raise NotImplementedError
