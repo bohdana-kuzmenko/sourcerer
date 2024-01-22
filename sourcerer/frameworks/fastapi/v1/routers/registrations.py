@@ -1,8 +1,9 @@
 from fastapi import Depends
 
-from sourcerer.core.infrastructure.models import ExtendedPydanticSourceCredentials, PydanticUser
+from sourcerer.core.infrastucture.data_provider_credentials.models import ExtendedPydanticDataProviderCredentials
+from sourcerer.core.infrastucture.user.models import PydanticUser
 from sourcerer.frameworks.fastapi.v1.routers.base import V1APIRouter
-from sourcerer.frameworks.fastapi.v1.config import source_controller
+from sourcerer.frameworks.fastapi.v1.config import credentials_controller
 from sourcerer.frameworks.fastapi.v1.services.auth import get_current_user
 
 
@@ -20,7 +21,7 @@ def list_registrations(
     """
     Get list of registered credentials
     """
-    return source_controller.list_registration(user)
+    return credentials_controller.list(user)
 
 
 @router.get("/registrations/{registration_id}/activate")
@@ -32,7 +33,7 @@ def list_registrations(
     """
     Get list of registered credentials
     """
-    return source_controller.activate_registration(user, registration_id)
+    return credentials_controller.activate(user, registration_id)
 
 
 @router.get("/registrations/{registration_id}/deactivate")
@@ -44,15 +45,15 @@ def list_registrations(
     """
     Get list of registered credentials
     """
-    return source_controller.deactivate_registration(user, registration_id)
+    return credentials_controller.deactivate(user, registration_id)
 
 
 @router.post("/registrations")
 def create_registration(
-        source_registration: ExtendedPydanticSourceCredentials,
+        source_registration: ExtendedPydanticDataProviderCredentials,
         user: PydanticUser = Depends(get_current_user)
 ):
     """
     Get list of registered credentials
     """
-    return source_controller.add(source_registration, user)
+    return credentials_controller.add(source_registration, user)

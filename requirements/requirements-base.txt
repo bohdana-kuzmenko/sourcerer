@@ -13,4 +13,5 @@ passlib
 bcrypt==4.0.1
 python-jose[cryptography]==3.3.0
 humanize
+python-multipart
 blobbyappleconnect # --index https://pypi.apple.com/simple

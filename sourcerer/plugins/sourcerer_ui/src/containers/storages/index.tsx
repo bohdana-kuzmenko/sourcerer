@@ -92,6 +92,10 @@ export default function StoragesPage() {
         storagesApi.deleteKey(dispatch, registrationId, activeStorage, storages.path,  key)
     }
 
+    const uploadFile = (event: any)=> {
+        let file = event.target.files[0]
+        storagesApi.uploadFile(dispatch, registrationId, activeStorage,storages.path, file.name, file)
+    }
 
     if (storages.shouldUpdate) {
         setActiveStorage("")
@@ -165,6 +169,7 @@ export default function StoragesPage() {
                                 onSearchInput={ onSearchInput }
                                 searchString = { searchString }
                                 activeSearchString={ activeSearchString }
+                                uploadFile={ uploadFile }
                             />
                     }
                 </Grid.Column>

@@ -1,15 +1,14 @@
 from datetime import timedelta
-from typing import Optional
-
 from fastapi import Depends
-from pydantic import BaseModel
 
-from sourcerer.core.infrastructure.models import PydanticUser
+from sourcerer.core.infrastucture.user.models import PydanticUser
 from sourcerer.frameworks.fastapi.v1.routers.base import V1APIRouter
 from sourcerer.frameworks.fastapi.v1.config import users_controller
 from sourcerer.frameworks.fastapi.v1.schemas.auth import Credentials
 from sourcerer.frameworks.fastapi.v1.services.auth import (
-    get_current_basic_auth_user, create_access_token, get_current_user
+    get_current_basic_auth_user,
+    create_access_token,
+    get_current_user
 )
 from sourcerer.frameworks.fastapi.config import ACCESS_TOKEN_EXPIRE_MINUTES
 

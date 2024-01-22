@@ -150,6 +150,7 @@ export const MIME_TYPES = {
 	'tsv':           'text/tab-separated-values',
 	'ttf':           'application/x-font-ttf',
 	'txt':           'text/plain',
+	'yaml':          'yaml/plain',
 	'ulw':           'audio/basic',
 	'ustar':         'application/x-ustar',
 	'vxml':          'application/voicexml+xml',

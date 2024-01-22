@@ -1,31 +1,7 @@
-from sourcerer.core.domain.services import BaseService
-from sourcerer.core.infrastructure.models import PydanticUser, User, PydanticUserBase
-from sourcerer.core.infrastructure.services.crypto_hash import CryptoHasher
-
-
-class BaseUsersException(BaseException):
-    pass
-
-
-class UserNotFoundException(BaseUsersException):
-    pass
-
-
-class BaseUsersService(BaseService):
-    def create(self, user: PydanticUser)-> PydanticUser:
-        raise NotImplemented
-
-    def update(self):
-        raise NotImplemented
-
-    def get(self, id: int) -> PydanticUser:
-        raise NotImplemented
-
-    def get_by_email(self, email: str) -> PydanticUser:
-        raise NotImplemented
-
-    def verify_user_credentials(self, user: PydanticUser, password: str) -> bool:
-        raise NotImplemented
+from sourcerer.core.domain.user.services import BaseUsersService
+from sourcerer.core.infrastucture.user.exceptions import UserNotFoundException
+from sourcerer.core.infrastucture.user.models import PydanticUser, PydanticUserBase, User
+from sourcerer.core.infrastucture.user.utils import CryptoHasher
 
 
 class UsersService(BaseUsersService):
