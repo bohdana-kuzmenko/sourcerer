@@ -56,6 +56,7 @@ setup(
         'bcrypt==4.0.1',
         'python-jose[cryptography]==3.3.0',
         'humanize',
+        'python-multipart==0.0.6',
         # 'blobbyappleconnect',
     ],
     entry_points={
