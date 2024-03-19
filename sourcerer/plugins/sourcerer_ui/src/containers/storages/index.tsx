@@ -12,12 +12,14 @@ import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import './index.css';
 import {CLEAN_ERROR} from "../../redux/actions/storage";
 import {PageLoader} from "../common/loader";
+import {useSearchParams} from "react-router-dom";
 
 const selectStorages = (state: any) => state.storages
 
 export default function StoragesPage() {
     const dispatch = useDispatch();
     let storages = useSelector(selectStorages);
+    let storagesRawList = storages.items;
     let storagesList = storages.sortedItems;
     let noItemsReceived = storages.noItemsReceived;
     let path = storages.path;
@@ -26,17 +28,26 @@ export default function StoragesPage() {
     let keyPreviewLoading = storages.keyPreviewLoading;
     const storagesApi = new StoragesApi()
 
+    const [searchParams, setSearchParams] = useSearchParams();
     let [activeStorage, setActiveStorage] = useState("");
     let [searchString, setSearchString] = useState("");
     let [activeSearchString, setActiveSearchString] = useState(false);
     let [registrationId, setRegistrationId] = useState("");
 
-    const selectStorage = (storage: any) => {
+    const selectStorage = (storage: any, preserve_path: boolean = false) => {
         setSearchString("")
         setActiveSearchString(false)
         setActiveStorage(storage['storage'])
         setRegistrationId(storage['registration_id'])
-        storagesApi.getStorageContent(dispatch, storage['registration_id'], storage['storage'], '')
+        let path = ''
+        if (preserve_path){
+            searchParams.set('active', storage['storage'])
+            setSearchParams(searchParams)   
+            path = searchParams.get('path') || ''
+        } else {
+            setSearchParams({active: storage['storage']})
+        }
+        storagesApi.getStorageContent(dispatch, storage['registration_id'], storage['storage'], path)
         storagesApi.getStoragePermissions(dispatch, storage['registration_id'], storage['storage'])
     }
     const selectFolder = (folder: any) => {
@@ -45,6 +56,8 @@ export default function StoragesPage() {
         }
         setSearchString("")
         setActiveSearchString(false)
+        searchParams.set('path', folder)
+        setSearchParams(searchParams)    
         storagesApi.getStorageContent(dispatch, registrationId, activeStorage, folder)
     }
     
@@ -61,6 +74,8 @@ export default function StoragesPage() {
         }
         setSearchString("")
         setActiveSearchString(false)
+        searchParams.set('path', folder)
+        setSearchParams(searchParams)    
         storagesApi.getStorageContent(dispatch, registrationId, activeStorage, folder)
     }
 
@@ -92,7 +107,10 @@ export default function StoragesPage() {
         storagesApi.listStorages(dispatch, storages);
     } else {
         if (activeStorage === "" && storagesList.length > 0) {
-            selectStorage(storagesList[0].names[0])
+            let storageName = searchParams.get('active')
+            let selectedStorage = storagesRawList.filter((item:any)=>item.storage === storageName)
+            let useSelectedStorage = selectedStorage.length > 0
+            selectStorage(useSelectedStorage ? selectedStorage[0]: storagesList[0].names[0], useSelectedStorage)
         }
     }
 
