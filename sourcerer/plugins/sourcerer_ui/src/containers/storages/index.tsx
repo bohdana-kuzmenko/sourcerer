@@ -11,19 +11,9 @@ import 'react-semantic-toasts/styles/react-semantic-alert.css';
 
 import './index.css';
 import {CLEAN_ERROR} from "../../redux/actions/storage";
+import {PageLoader} from "../common/loader";
 
 const selectStorages = (state: any) => state.storages
-
-
-const PageLoader = () => {
-    return (
-        <Grid verticalAlign='middle' style={ {height: '100%'} }>
-            <Grid.Column>
-                <Loader active size='massive' inline='centered'/>
-            </Grid.Column>
-        </Grid>
-    )
-}
 
 export default function StoragesPage() {
     const dispatch = useDispatch();

@@ -4,6 +4,7 @@ import {Button, Container, Form, Grid, Header, Segment} from "semantic-ui-react"
 import PublicPage from "../intro";
 import {useAuth} from "./utils";
 import {useDispatch} from "react-redux";
+import {AppNameHeaderComponent} from "../common/header";
 
 function SignInPage() {
     const dispatch = useDispatch()
@@ -29,17 +30,7 @@ function SignInPage() {
 
         <PublicPage show_home={true} show_authenticate={true}>
             <Container text textAlign='center'>
-                <Header
-                    as='h1'
-                    content='Data Sourcer'
-                    inverted
-                    style={{
-                        fontSize: '4em',
-                        fontWeight: 'normal',
-                        marginBottom: 0,
-                        marginTop: '3em',
-                    }}
-                />
+                <AppNameHeaderComponent/>
                 <Grid centered relaxed>
                     <Grid.Column width={9}>
                         <Form size='mini' onSubmit={handleSubmit}>

@@ -32,12 +32,15 @@ export const StoragePermissions = (props: StoragePermissionsParams) => {
                         return (
                             <Table.Row key={ user + '-permissions' }>
                                 <Table.Cell>{ user }</Table.Cell>
-                                <Table.Cell>{ usersPermissions.indexOf('FULL_CONTROL') !== -1 &&
-                                    <Icon color='yellow' name='checkmark' size='large'/> }</Table.Cell>
-                                <Table.Cell>{ usersPermissions.indexOf('READ') !== -1 &&
-                                    <Icon color='yellow' name='checkmark' size='large'/> }</Table.Cell>
-                                <Table.Cell>{ usersPermissions.indexOf('WRITE') !== -1 &&
-                                    <Icon color='yellow' name='checkmark' size='large'/> }</Table.Cell>
+                                {
+                                    ['FULL_CONTROL', 'READ', 'WRITE'].map((permission) => {
+                                        return (
+                                            <Table.Cell key={`${user}_${permission}`}>{ usersPermissions.indexOf(permission) !== -1 &&
+                                                <Icon color='yellow' name='checkmark' size='large'/> }
+                                            </Table.Cell>
+                                        )
+                                    })
+                                }
                             </Table.Row>
                         )
                     })

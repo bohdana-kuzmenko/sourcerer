@@ -50,23 +50,16 @@ export class SettingsApi {
         });
     };
 
-    activateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`/api/v1/registrations/credentials/${ id }/activate`,
+    switchRegistrationActivation = async (dispatch: any, id: any, active: boolean) => {
+        let action = active ? 'activate' : 'deactivate';
+        await client.get(`/api/v1/registrations/credentials/${ id }/${ action }`,
         ).then((data) => {
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {
             dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
         });
     };
-    deactivateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`/api/v1/registrations/credentials/${ id }/deactivate`,
-        ).then((data) => {
-            dispatch({type: STORAGES_SHOULD_UPDATE})
-        }).catch(() => {
-            dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
-        });
-    };
-
+    
     listRegisteredStorages = (dispatch: any, storages: any) => {
         if (!storages.loading) {
             dispatch({type: GET_REGISTERED_STORAGES_START})
@@ -94,7 +87,6 @@ export class SettingsApi {
         await client.post("/api/v1/registrations/storages",
             storage,
         ).then((data) => {
-            console.log(data)
             dispatch({type: ADD_REGISTERED_STORAGE_START})
         }).catch(() => {
             dispatch({type: ADD_REGISTERED_STORAGE_FAILED})
@@ -102,7 +94,7 @@ export class SettingsApi {
     }
     deleteRegisteredStorages = (dispatch: any, storage_id: any) => {
         dispatch({type: DELETE_REGISTERED_STORAGE_START})
-        client.delete(`/api/v1/registrations/storages/${storage_id}`
+        client.delete(`/api/v1/registrations/storages/${ storage_id }`
         ).then((data) => {
             dispatch({
                 type: DELETE_REGISTERED_STORAGE_SUCCESS,
@@ -116,6 +108,4 @@ export class SettingsApi {
             })
         });
     };
-    
-
 }

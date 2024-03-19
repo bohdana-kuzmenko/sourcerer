@@ -1,20 +1,16 @@
 import {
     Accordion,
-    Breadcrumb,
     Dropdown,
     Grid,
     Icon,
-    Image,
-    Modal,
-    Segment,
     Table,
     Input, GridRow, GridColumn, Button
 } from "semantic-ui-react";
 import React, {useEffect, useRef, useState} from "react";
 import {StoragePermissions} from "../storages_permissions";
 import {MIME_TYPES} from "../../../constants";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import {PreviewModalContent} from "./preview_modal";
+import {StoragePreviewPath} from "./storage_path_component";
 
 
 
@@ -42,56 +38,38 @@ export const StorageContent = (props: any) => {
     let keyPreviewLoading = props.keyPreviewLoading
     let uploadFile = props.uploadFile
 
+    const preview = (key: string, parse_json_content: boolean, presigned: boolean, content_type: string) => {
+        setOpen(true);
+        setPreviewKey(key);
+        let content = presigned ? props.previewContent(key, true): props.previewContent(key)
+        if (parse_json_content){
+            content = JSON.parse(content)
+        }
+        setPreviewKey(key);
+        setPreviewContent(content)
+        setPreviewContentType(content_type)
+    }
     const onPreviewOpen = (key: string) => {
-        const images = ['jpg', 'jpeg', 'png']
-
         let extension = key.split('.').slice(-1)[0].toLowerCase()
         // @ts-ignore
         let mime_type = MIME_TYPES[extension]
-
-        console.log(extension)
-        console.log(mime_type)
         if (mime_type.includes('image')) {
-            setOpen(true)
-            let link = props.previewContent(key, true)
-            setPreviewKey(key);
-            setPreviewContent(link);
-            setPreviewContentType("image")
+            preview(key,false,true, 'image')
         }
         if (mime_type.includes('json')) {
-            setOpen(true)
-            let link = JSON.parse(props.previewContent(key))
-            setPreviewKey(key);
-            setPreviewContent(link)
-            setPreviewContentType("json")
+            preview(key,true,false, 'json')
         }
         if (mime_type.includes('xml')) {
-            setOpen(true)
-            let link = JSON.parse(props.previewContent(key))
-            setPreviewKey(key);
-            setPreviewContent(link)
-            setPreviewContentType("xml")
+            preview(key,true,false, 'xml')
         }
         if (mime_type.includes('text')) {
-            setOpen(true)
-            let link = JSON.parse(props.previewContent(key))
-            setPreviewKey(key);
-            setPreviewContent(link)
-            setPreviewContentType("text")
+            preview(key,true,false, 'text')
         }
         if (mime_type.includes('yaml')) {
-            setOpen(true)
-            let link = JSON.parse(props.previewContent(key))
-            setPreviewKey(key);
-            setPreviewContent(link)
-            setPreviewContentType("yaml")
+            preview(key,true,false, 'yaml')
         }
         if (mime_type.includes('audio')) {
-            setOpen(true)
-            let link = props.previewContent(key, true)
-            setPreviewKey(key);
-            setPreviewContent(link)
-            setPreviewContentType("audio")
+            preview(key,false,false, 'audio')
         }
     }
     const handleClick = (e: any, titleProps: any) => {
@@ -119,29 +97,7 @@ export const StorageContent = (props: any) => {
                     <Grid>
                         <Grid.Row columns={ 2 }>
                             <Grid.Column>
-                                <Breadcrumb>
-                                    <Breadcrumb.Section key={storage+'-path-key'} link onClick={ (e) => changePath(e, -1) }>
-                                        { storage }
-                                    </Breadcrumb.Section>
-                                    <Breadcrumb.Divider key={storage+'-brcr-key'}/>
-                                    {
-                                        path.split('/').map((folder: any, index: number) => {
-                                            if (folder.length === 0) {
-                                                return null
-                                            }
-                                            return (
-                                                <>
-                                                    <Breadcrumb.Section
-                                                        onClick={ (e) => changePath(e, index) }
-                                                        key={ folder + '-path-key' }
-                                                        link>{ folder }</Breadcrumb.Section>
-                                                    { index !== path.split('/').length - 1 &&
-                                                        <Breadcrumb.Divider key={ folder + '-brcr-key' }/> }
-                                                </>
-                                            )
-                                        })
-                                    }
-                                </Breadcrumb>
+                                <StoragePreviewPath storage={storage} path={path} onChangePath={changePath}/>
                             </Grid.Column>
                             <Grid.Column textAlign='right'> <Icon name='caret down'/></Grid.Column>
                         </Grid.Row>
@@ -211,55 +167,15 @@ export const StorageContent = (props: any) => {
                 }
                 </Table.Body>
             </Table>
-
-            <Modal
-                open={ open }
-                onClose={ () => setOpen(false) }
-                onOpen={ () => setOpen(true) }
-            >
-                <Modal.Header>Preview { previewKey}</Modal.Header>
-                <Modal.Content image={ !keyPreviewLoading && previewContentType === 'image' }>
-                    { !keyPreviewLoading && previewContentType === 'image' && (
-                        <Image src={ previewContent }/>
-                    ) }
-                    { !keyPreviewLoading && previewContentType === 'json' && (
-                        <Segment>
-                            <SyntaxHighlighter language="json" style={tomorrow}>
-                                {previewContent}
-                            </SyntaxHighlighter>
-                        </Segment>
-                    ) }
-                    { !keyPreviewLoading && previewContentType === 'xml' && (
-                        <Segment>
-                            <SyntaxHighlighter language="xml" style={tomorrow}>
-                                {previewContent}
-                            </SyntaxHighlighter>
-                        </Segment>
-                    ) }
-                    { !keyPreviewLoading && previewContentType === 'text' && (
-                        <Segment>
-                            { previewContent }
-                        </Segment>
-                    ) }
-                    { !keyPreviewLoading && previewContentType === 'yaml' && (
-                        <Segment>
-                             <SyntaxHighlighter language="yaml" style={tomorrow}>
-                                {previewContent}
-                              </SyntaxHighlighter>
-                        </Segment>
-                    ) }
-                    { !keyPreviewLoading && previewContentType === 'audio' && (
-                        <Segment>
-                            <audio  style={{width: '100%'}} controls src={previewContent} />
-                        </Segment>
-                    ) }
-                    { keyPreviewLoading && (
-                        <Segment>
-                            Loading...
-                        </Segment>)
-                    }
-                </Modal.Content>
-            </Modal>
+            <PreviewModalContent
+                open={open}
+                onOpen={()=>setOpen(true)}
+                onClose={()=>setOpen(false)}
+                previewKey={previewKey}
+                keyPreviewLoading={keyPreviewLoading}
+                previewContentType={previewContentType}
+                previewContent={previewContent}
+            />
         </>
     )
 }

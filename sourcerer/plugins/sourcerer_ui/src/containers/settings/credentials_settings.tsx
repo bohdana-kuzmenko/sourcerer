@@ -1,34 +1,8 @@
 import {useDispatch, useSelector} from "react-redux";
 import React from "react";
-import {Button, Checkbox, Divider, Form, Icon, Modal, Table} from "semantic-ui-react";
+import {Button, Checkbox, Divider, Form, Modal, Table} from "semantic-ui-react";
 import {SettingsApi} from "../../api/settings-api";
-import {toast} from 'react-semantic-toasts';
-import 'react-semantic-toasts/styles/react-semantic-alert.css';
-import {CLEAN_ERROR} from "../../redux/actions/storage";
-import {CLEAN_SETTINGS_ERROR} from "../../redux/actions/registered-credentials";
-
-
-interface InputFieldParams {
-    condition: boolean;
-    onChange: Function;
-    label: string,
-    placeholder: string
-}
-
-const InputField = (props: InputFieldParams) => {
-    if (!props.condition) {
-        return null
-    }
-    return (
-        <Form.Field
-            onChange={ props.onChange }>
-            <label>{ props.label }</label>
-            <input placeholder={ props.placeholder }/>
-        </Form.Field>
-    )
-
-
-}
+import {AddItemDialogButton, InputField, showError} from "./common";
 
 const selectRegisteredCredentials = (state: any) => state.registeredCredentials
 
@@ -44,20 +18,7 @@ export default function CredentialsSettings() {
         settingsApi.getRegistrations(dispatch, registeredCredentialsLoading);
     }
     if (registeredCredentialsSelector.error !== undefined) {
-        toast(
-            {
-                title: "Error:" + registeredCredentialsSelector.error,
-                type: "error",
-                time: 5000,
-                color: "yellow",
-                icon: "exclamation",
-                size: "tiny"
-            },
-            () => dispatch({type: CLEAN_ERROR}),
-            () => dispatch({type: CLEAN_ERROR}),
-            () => dispatch({type: CLEAN_ERROR})
-        );
-        dispatch({type: CLEAN_SETTINGS_ERROR})
+        showError(registeredCredentialsSelector.error, dispatch)
     }
 
     const [credentialsOpen, setCredentialsOpen] = React.useState(false)
@@ -78,21 +39,14 @@ export default function CredentialsSettings() {
     }
     
     let onActiveChange = async (creds: any) => {
-        if (creds.active) {
-            await settingsApi.deactivateRegistration(dispatch, creds.id)
-        } else {
-            await settingsApi.activateRegistration(dispatch, creds.id)
-        }
+        settingsApi.switchRegistrationActivation(dispatch, creds.id, creds.active)
         settingsApi.getRegistrations(dispatch, registeredCredentialsLoading);
     }
-
 
     return (
         <>
             <Divider horizontal> Registered Credentials</Divider>
-            <Button color={ "yellow" } labelPosition='left' icon onClick={ () => setCredentialsOpen(true) }>
-                <Icon name='plus'/> Add Credentials
-            </Button>
+            <AddItemDialogButton onClick={setCredentialsOpen} title={'Add Credentials'}/>
             <Table>
                 <Table.Header>
                     <Table.Row>
@@ -148,24 +102,29 @@ export default function CredentialsSettings() {
                                 setProvider(value?.toString() || "")
                             } }
                         />
-                        <InputField
-                            condition={ S3_COMPATIBLE_BUCKETS.indexOf(provider) > -1 }
-                            onChange={ (event: any) => setFormData({
-                                ...formData,
-                                secret_access_key: event.target.value,
-                            }) }
-                            label={ "AWS Secret Access Key" }
-                            placeholder={ "AWS Secret Access Key" }
-                        />
-                        <InputField
-                            condition={ S3_COMPATIBLE_BUCKETS.indexOf(provider) > -1 }
-                            onChange={ (event: any) => setFormData({
-                                ...formData,
-                                access_key: event.target.value,
-                            }) }
-                            label={ "AWS Access Key" }
-                            placeholder={ "AWS Secret Access Key" }
-                        />
+                        {
+                            S3_COMPATIBLE_BUCKETS.indexOf(provider) > -1 && (
+                                <>
+                                    <InputField
+                                        onChange={ (event: any) => setFormData({
+                                            ...formData,
+                                            secret_access_key: event.target.value,
+                                        }) }
+                                        label={ "AWS Secret Access Key" }
+                                        placeholder={ "AWS Secret Access Key" }
+                                    />
+                                    <InputField
+                                        onChange={ (event: any) => setFormData({
+                                            ...formData,
+                                            access_key: event.target.value,
+                                        }) }
+                                        label={ "AWS Access Key" }
+                                        placeholder={ "AWS Secret Access Key" }
+                                    />
+                                </>
+                            )
+                        }
+                        
                         <InputField
                             condition={ ["MCQUEEN"].indexOf(provider) > -1 }
                             onChange={ (event: any) => setFormData({
