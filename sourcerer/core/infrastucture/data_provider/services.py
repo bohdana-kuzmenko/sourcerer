@@ -51,15 +51,6 @@ class S3Base(BaseDataProviderService):
             }
             for i in response.get("Buckets")
         ]
-        # ToDo: to be replaced with storages registration
-        if getattr(self, 'aws_secret_access_key', '') == 'cato_bot':
-            result.extend([
-                {
-                    "storage": i,
-                    "date_created": '2024-01-01',
-                    "cloud": 'blobby'
-                } for i in ['orbit_imgs', 'bif-orbit']
-            ])
         return result
 
     def list_storage_items(self, storage: str, path: str = "", prefix: str = "", start_after=""):

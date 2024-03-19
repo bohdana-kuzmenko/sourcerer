@@ -4,6 +4,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from sourcerer.core.config.db import SessionLocal, engine, Base
 
+from sourcerer.core.infrastucture.user.models import *
+from sourcerer.core.infrastucture.data_provider_credentials.models import *
+from sourcerer.core.infrastucture.storage_registration.models import *
+
+
 app = FastAPI()
 app.db = scoped_session(SessionLocal)
 Base.metadata.create_all(bind=engine)

@@ -19,6 +19,9 @@ def run_with_ui():
 
 def run_server():
     from sourcerer.frameworks.fastapi.app import app
+    url_list = [{"path": route.path, "name": route.name} for route in app.routes]
+    for i in url_list:
+        print(i)
     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 

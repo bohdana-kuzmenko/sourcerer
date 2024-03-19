@@ -1,18 +1,26 @@
-import {useDispatch} from "react-redux";
-import {USER_AUTHORISE_FAILED, USER_AUTHORISE_START, USER_AUTHORISE_SUCCESS} from "../redux/actions/auth";
 import {client} from "./client";
 import {
     GET_REGISTERED_CREDENTIALS_FAILED,
     GET_REGISTERED_CREDENTIALS_START,
     GET_REGISTERED_CREDENTIALS_SUCCESS
 } from "../redux/actions/registered-credentials";
-import {GET_KEY_PREVIEW_START, GET_KEY_PREVIEW_SUCCESS, STORAGES_SHOULD_UPDATE} from "../redux/actions/storage";
+import {STORAGES_SHOULD_UPDATE} from "../redux/actions/storage";
+import {
+    ADD_REGISTERED_STORAGE_FAILED,
+    ADD_REGISTERED_STORAGE_START,
+    DELETE_REGISTERED_STORAGE_FAILED,
+    DELETE_REGISTERED_STORAGE_START,
+    DELETE_REGISTERED_STORAGE_SUCCESS,
+    GET_REGISTERED_STORAGES_FAILED,
+    GET_REGISTERED_STORAGES_START,
+    GET_REGISTERED_STORAGES_SUCCESS
+} from "../redux/actions/registered_storages";
 
 export class SettingsApi {
     getRegistrations = (dispatch: any, loading: boolean) => {
         if (!loading) {
             dispatch({type: GET_REGISTERED_CREDENTIALS_START})
-            client.get("/api/v1/registrations",
+            client.get("/api/v1/registrations/credentials",
             ).then((data) => {
                 dispatch({
                     type: GET_REGISTERED_CREDENTIALS_SUCCESS,
@@ -33,7 +41,7 @@ export class SettingsApi {
     }
 
     addRegistration = async (dispatch: any, credentials: any) => {
-        await client.post("/api/v1/registrations",
+        await client.post("/api/v1/registrations/credentials",
             credentials,
         ).then((data) => {
 
@@ -43,7 +51,7 @@ export class SettingsApi {
     };
 
     activateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`/api/v1/registrations/${ id }/activate`,
+        await client.get(`/api/v1/registrations/credentials/${ id }/activate`,
         ).then((data) => {
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {
@@ -51,12 +59,63 @@ export class SettingsApi {
         });
     };
     deactivateRegistration = async (dispatch: any, id: any) => {
-        await client.get(`/api/v1/registrations/${ id }/deactivate`,
+        await client.get(`/api/v1/registrations/credentials/${ id }/deactivate`,
         ).then((data) => {
             dispatch({type: STORAGES_SHOULD_UPDATE})
         }).catch(() => {
             dispatch({type: GET_REGISTERED_CREDENTIALS_FAILED})
         });
     };
+
+    listRegisteredStorages = (dispatch: any, storages: any) => {
+        if (!storages.loading) {
+            dispatch({type: GET_REGISTERED_STORAGES_START})
+            client.get("/api/v1/registrations/storages"
+            ).then((data) => {
+                dispatch({
+                    type: GET_REGISTERED_STORAGES_SUCCESS,
+                    payload: {
+                        items: data,
+                    }
+                })
+            }).catch((data) => {
+                dispatch({
+                    type: GET_REGISTERED_STORAGES_FAILED,
+                    payload: {
+                        error: data
+                    }
+                })
+            });
+        }
+        ;
+    }
+    addRegisteredStorages = async (dispatch: any, storage: any) => {
+        dispatch({type: ADD_REGISTERED_STORAGE_START})
+        await client.post("/api/v1/registrations/storages",
+            storage,
+        ).then((data) => {
+            console.log(data)
+            dispatch({type: ADD_REGISTERED_STORAGE_START})
+        }).catch(() => {
+            dispatch({type: ADD_REGISTERED_STORAGE_FAILED})
+        });
+    }
+    deleteRegisteredStorages = (dispatch: any, storage_id: any) => {
+        dispatch({type: DELETE_REGISTERED_STORAGE_START})
+        client.delete(`/api/v1/registrations/storages/${storage_id}`
+        ).then((data) => {
+            dispatch({
+                type: DELETE_REGISTERED_STORAGE_SUCCESS,
+            })
+        }).catch((data) => {
+            dispatch({
+                type: DELETE_REGISTERED_STORAGE_FAILED,
+                payload: {
+                    error: data
+                }
+            })
+        });
+    };
+    
 
 }

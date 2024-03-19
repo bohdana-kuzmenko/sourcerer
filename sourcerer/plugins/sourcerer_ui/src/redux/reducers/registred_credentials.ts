@@ -18,6 +18,7 @@ export default function registeredCredentialsReducer(state = initialState, actio
         case GET_REGISTERED_CREDENTIALS_START: {
             return {
                 ...state,
+                shouldLoadCredentials: false,
                 loading: true,
                 error: undefined,
             }
