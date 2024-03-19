@@ -2,6 +2,7 @@ import {createMedia} from "@artsy/fresnel";
 import React from "react";
 import {Button, Container, Menu, Segment, Visibility} from "semantic-ui-react";
 import {Link} from "react-router-dom";
+import {ButtonSimple} from "../common/buttons";
 
 
 const {MediaContextProvider, Media} = createMedia({
@@ -40,15 +41,11 @@ const PublicPage = (props: PublicPageProps) => {
                         <Container>
                             <Menu.Item position='right'>
                                 {props.show_authenticate && <Link to="/authenticate">
-                                    <Button inverted={false}>
-                                        Log in
-                                    </Button>
+                                    <ButtonSimple label={'Log in'}/>
                                 </Link>
                                 }
                                 {props.show_home && <Link to="/">
-                                    <Button inverted={false}>
-                                        Home
-                                    </Button>
+                                    <ButtonSimple label={'Home'}/>
                                 </Link>
                                 }
                             </Menu.Item>

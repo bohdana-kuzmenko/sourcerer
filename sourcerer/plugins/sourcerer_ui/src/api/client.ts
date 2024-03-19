@@ -1,7 +1,7 @@
-import {useNavigate} from "react-router-dom";
-
 export async function client(endpoint: string, {body, ...customConfig}: any = {}) {
-    const headers = {'Content-Type': 'application/json'}
+    const headers = {
+        'Content-Type': 'application/json',
+    }
 
     const config = {
         method: body ? 'POST' : 'GET',
@@ -36,23 +36,18 @@ export async function client(endpoint: string, {body, ...customConfig}: any = {}
     }
 }
 
+function authToken(){
+    return {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')}
+}
+
 client.get = function (endpoint: string, customConfig = {}) {
-    return client(endpoint, {
-        headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
-        ...customConfig, method: 'GET'
-    })
+    return client(endpoint, {headers: authToken(), ...customConfig, method: 'GET'})
 }
 
 client.delete = function (endpoint: string, customConfig = {}) {
-    return client(endpoint, {
-        headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
-        ...customConfig, method: 'DELETE'
-    })
+    return client(endpoint, {headers: authToken(), ...customConfig, method: 'DELETE'})
 }
 
 client.post = function (endpoint: string, body: any, customConfig = {}) {
-    return client(endpoint, {
-        headers: {Authorization: "Bearer " + window.localStorage.getItem('sourcer_token')},
-        ...customConfig, body
-    })
+    return client(endpoint, {headers: authToken(), ...customConfig, body})
 }

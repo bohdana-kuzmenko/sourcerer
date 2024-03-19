@@ -1,9 +1,10 @@
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import React from "react";
-import {Button, Container, Form, Grid, Header, Message, Segment} from "semantic-ui-react";
+import {Button, Container, Form, Grid, Message, Segment} from "semantic-ui-react";
 import PublicPage from "../intro";
 import {useAuth} from "./utils";
 import {useDispatch} from "react-redux";
+import {AppNameHeaderComponent} from "../common/header";
 
 function LoginPage() {
     const dispatch = useDispatch()
@@ -26,17 +27,7 @@ function LoginPage() {
 
         <PublicPage show_home={true}>
             <Container text textAlign='center'>
-                <Header
-                    as='h1'
-                    content='Data Sourcer'
-                    inverted
-                    style={{
-                        fontSize: '4em',
-                        fontWeight: 'normal',
-                        marginBottom: 0,
-                        marginTop: '3em',
-                    }}
-                />
+                <AppNameHeaderComponent/>
                 <Grid centered relaxed>
                     <Grid.Column width={9}>
                         <Form size='mini' onSubmit={handleSubmit}>

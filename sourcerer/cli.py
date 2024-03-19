@@ -2,14 +2,21 @@ import os
 import pathlib
 import subprocess
 from argparse import ArgumentParser
+
 import uvicorn
 
 
 def run_ui_build():
-    subprocess.run("npm install", shell=True,
-                   cwd=os.path.join(pathlib.Path(__file__).parent.resolve(), "plugins/sourcerer_ui"))
-    subprocess.run("npm run build", shell=True,
-                   cwd=os.path.join(pathlib.Path(__file__).parent.resolve(), "plugins/sourcerer_ui"))
+    npm_commands = [
+        'npm install',
+        'npm run build'
+    ]
+    for command in npm_commands:
+        subprocess.run(
+            command,
+            shell=True,
+            cwd=os.path.join(pathlib.Path(__file__).parent.resolve(), "plugins/sourcerer_ui")
+        )
 
 
 def run_with_ui():

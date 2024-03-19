@@ -17,6 +17,7 @@ import PublicPage from "./intro";
 import {AuthProvider, RequireAuth} from "./auth/utils";
 import StoragesPage from "./storages";
 import SettingsPage from "./settings";
+import {AppNameHeaderComponent} from "./common/header";
 
 export default function App() {
     return (
@@ -35,17 +36,7 @@ export default function App() {
 
 const HomepageHeading = () => (
     <Container text>
-        <Header
-            as='h1'
-            content='Data Sourcerer'
-            inverted
-            style={{
-                fontSize: '4em',
-                fontWeight: 'normal',
-                marginBottom: 0,
-                marginTop: '3em',
-            }}
-        />
+        <AppNameHeaderComponent/>
         <Header
             as='h2'
             content='View your storages data'

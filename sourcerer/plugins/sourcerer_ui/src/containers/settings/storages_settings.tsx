@@ -2,33 +2,7 @@ import {useDispatch, useSelector} from "react-redux";
 import React from "react";
 import {Button, Divider, Form, Icon, Modal, Table} from "semantic-ui-react";
 import {SettingsApi} from "../../api/settings-api";
-import {toast} from 'react-semantic-toasts';
-import 'react-semantic-toasts/styles/react-semantic-alert.css';
-import {CLEAN_ERROR} from "../../redux/actions/storage";
-import {CLEAN_SETTINGS_ERROR} from "../../redux/actions/registered-credentials";
-
-
-interface InputFieldParams {
-    condition: boolean;
-    onChange: Function;
-    label: string,
-    placeholder: string
-}
-
-const InputField = (props: InputFieldParams) => {
-    if (!props.condition) {
-        return null
-    }
-    return (
-        <Form.Field
-            onChange={ props.onChange }>
-            <label>{ props.label }</label>
-            <input placeholder={ props.placeholder }/>
-        </Form.Field>
-    )
-
-
-}
+import {AddItemDialogButton, InputField, showError} from "./common";
 
 const selectRegisteredStorages = (state: any) => state.registeredStorages
 const selectRegisteredCredentials = (state: any) => state.registeredCredentials
@@ -47,20 +21,7 @@ export default function StoragesSettings() {
         settingsApi.listRegisteredStorages(dispatch, registeredStorages);
     }
     if (registeredStoragesSelector.error !== undefined) {
-        toast(
-            {
-                title: "Error:" + registeredStorages.error,
-                type: "error",
-                time: 5000,
-                color: "yellow",
-                icon: "exclamation",
-                size: "tiny"
-            },
-            () => dispatch({type: CLEAN_ERROR}),
-            () => dispatch({type: CLEAN_ERROR}),
-            () => dispatch({type: CLEAN_ERROR})
-        );
-        dispatch({type: CLEAN_SETTINGS_ERROR})
+        showError(registeredStorages.error, dispatch)
     }
 
     const [storageOpen, setStorageOpen] = React.useState(false)
@@ -90,9 +51,7 @@ export default function StoragesSettings() {
     return (
         <>
             <Divider horizontal>Registered Storages</Divider>
-            <Button color={ "yellow" } labelPosition='left' icon onClick={ () => setStorageOpen(true) }>
-                <Icon name='plus'/> Add storage
-            </Button>
+            <AddItemDialogButton onClick={setStorageOpen} title={'Add storage'}/>
 
             <Table columns={ 3 }>
                 <Table.Header>
