@@ -41,13 +41,13 @@ function authToken(){
 }
 
 client.get = function (endpoint: string, customConfig = {}) {
-    return client(endpoint, {headers: authToken(), ...customConfig, method: 'GET'})
-}
-
-client.delete = function (endpoint: string, customConfig = {}) {
-    return client(endpoint, {headers: authToken(), ...customConfig, method: 'DELETE'})
+    return client(endpoint, {headers: authToken(), ...customConfig})
 }
 
 client.post = function (endpoint: string, body: any, customConfig = {}) {
     return client(endpoint, {headers: authToken(), ...customConfig, body})
+}
+
+client.delete = function (endpoint: string, customConfig = {}) {
+    return client(endpoint, {headers: authToken(), ...customConfig, method: 'DELETE'})
 }
