@@ -39,7 +39,7 @@ export default function CredentialsSettings() {
     }
     
     let onActiveChange = async (creds: any) => {
-        settingsApi.switchRegistrationActivation(dispatch, creds.id, creds.active)
+        await settingsApi.switchRegistrationActivation(dispatch, creds.id, !creds.active)
         settingsApi.getRegistrations(dispatch, registeredCredentialsLoading);
     }
 
