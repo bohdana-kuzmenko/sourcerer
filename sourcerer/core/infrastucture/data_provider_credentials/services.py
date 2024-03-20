@@ -1,5 +1,6 @@
 from sourcerer.core.domain.data_provider_credentials.services import BaseDataProviderCredentialService
 from sourcerer.core.infrastucture.data_provider.exceptions import SourceNotFoundException
+from sourcerer.core.infrastucture.data_provider_credentials.exceptions import RegistrationAccessDeniedException
 from sourcerer.core.infrastucture.data_provider_credentials.models import PydanticDataProviderCredentials, Credentials
 
 
@@ -48,3 +49,8 @@ class DataProviderCredentialsService(BaseDataProviderCredentialService):
 
     def delete(self):
         pass
+
+    def verify_user_access(self, credentials_id, user_id):
+        registration = self.get(credentials_id, return_raw_entity=True)
+        if registration.owner_id != user_id:
+            raise RegistrationAccessDeniedException

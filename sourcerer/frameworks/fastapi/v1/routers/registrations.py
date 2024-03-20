@@ -1,8 +1,7 @@
 from fastapi import Depends
 
 from sourcerer.core.infrastucture.data_provider_credentials.models import ExtendedPydanticDataProviderCredentials
-from sourcerer.core.infrastucture.storage_registration.models import PydanticStorageRegistration, \
-    ExtendedPydanticStorageRegistration
+from sourcerer.core.infrastucture.storage_registration.models import ExtendedPydanticStorageRegistration
 from sourcerer.core.infrastucture.user.models import PydanticUser
 from sourcerer.frameworks.fastapi.v1.config import credentials_controller, storages_registration_controller
 from sourcerer.frameworks.fastapi.v1.routers.base import V1APIRouter

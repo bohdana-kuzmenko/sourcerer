@@ -21,31 +21,31 @@ class DataProviderController:
             data_provider_credentials.credentials.decode("utf-8")
         )
 
-    def get_storage_permissions(self, data_provider_credentials_id, bucket):
+    def get_storage_permissions(self, user: PydanticUser, data_provider_credentials_id, bucket):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.get_storage_permissions(bucket)
 
-    def get_storage_metadata(self, data_provider_credentials_id, bucket):
+    def get_storage_metadata(self, user: PydanticUser, data_provider_credentials_id, bucket):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.get_storage_metadata(bucket)
 
-    def get_download_url(self, data_provider_credentials_id, bucket, key):
+    def get_download_url(self, user: PydanticUser, data_provider_credentials_id, bucket, key):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.get_download_url(bucket, key)
 
-    def upload(self, data_provider_credentials_id, bucket, path, file):
+    def upload(self, user: PydanticUser, data_provider_credentials_id, bucket, path, file):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.upload(bucket, path, file)
 
-    def preview_data(self, data_provider_credentials_id, bucket, key):
+    def preview_data(self, user: PydanticUser, data_provider_credentials_id, bucket, key):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.read_storage_item(bucket, key)
 
-    def delete_key(self, data_provider_credentials_id, bucket, key):
+    def delete_key(self, user: PydanticUser, data_provider_credentials_id, bucket, key):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.delete_storage_item(bucket, key)
 
-    def list_storages(self, data_provider_credentials_id: int = None, user: PydanticUser = None):
+    def list_storages(self, user: PydanticUser, data_provider_credentials_id: int = None):
         if data_provider_credentials_id:
             # todo: add check for ownership
             sources = [self.data_provider_credentials_service.get(data_provider_credentials_id)]
@@ -65,6 +65,6 @@ class DataProviderController:
 
         return result
 
-    def list_storage_content(self, data_provider_credentials_id: int, bucket: str, path: str = "", prefix: str = ""):
+    def list_storage_content(self, user: PydanticUser,  data_provider_credentials_id: int, bucket: str, path: str = "", prefix: str = ""):
         data_provider_service = self._get_data_provider_service_by_credentials_id(data_provider_credentials_id)
         return data_provider_service.list_storage_items(bucket, path, prefix)
