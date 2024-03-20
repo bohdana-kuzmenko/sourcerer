@@ -1,8 +1,9 @@
 from fastapi import Depends
 from fastapi import UploadFile
+
 from sourcerer.core.infrastucture.user.models import PydanticUser
-from sourcerer.frameworks.fastapi.v1.routers.base import V1APIRouter
 from sourcerer.frameworks.fastapi.v1.config import storages_controller
+from sourcerer.frameworks.fastapi.v1.routers.base import V1APIRouter
 from sourcerer.frameworks.fastapi.v1.routers.users import get_current_user
 
 
@@ -15,17 +16,9 @@ router = StoragesAPIRouter()
 
 @router.get("/storages")
 def storages(
-        user: PydanticUser = Depends(get_current_user)
+        user: PydanticUser = Depends(get_current_user),
+        registration_id: str = None
 ):
-    """
-    Get list of available storages
-    :return:
-    """
-    return storages_controller.list_storages(user, None)
-
-
-@router.get("/registrations/credentials/{registration_id}/storages")
-def storages(registration_id, user: PydanticUser = Depends(get_current_user)):
     """
     Get list of available storages
     :return:
@@ -33,8 +26,9 @@ def storages(registration_id, user: PydanticUser = Depends(get_current_user)):
     return storages_controller.list_storages(user, registration_id)
 
 
-@router.get("/registrations/credentials/{registration_id}/storages/{storage_name}")
-def storage_content(registration_id, storage_name, path: str = "", prefix: str = "",user: PydanticUser = Depends(get_current_user)):
+@router.get("/storages/{storage_name}")
+def storage_content(registration_id, storage_name, path: str = "", prefix: str = "",
+                    user: PydanticUser = Depends(get_current_user)):
     """
     Get list of available storages for credentials registration
     :return:
@@ -42,7 +36,7 @@ def storage_content(registration_id, storage_name, path: str = "", prefix: str =
     return storages_controller.list_storage_content(user, registration_id, storage_name, path, prefix)
 
 
-@router.get("/registrations/credentials/{registration_id}/storages/{storage_name}/permissions")
+@router.get("/storages/{storage_name}/permissions")
 def storage_permissions(registration_id, storage_name, user: PydanticUser = Depends(get_current_user)):
     """
     List storage permissions
@@ -51,7 +45,7 @@ def storage_permissions(registration_id, storage_name, user: PydanticUser = Depe
     return storages_controller.get_storage_permissions(user, registration_id, storage_name)
 
 
-@router.get("/registrations/credentials/{registration_id}/storages/{storage_name}/download_url")
+@router.get("/storages/{storage_name}/download_url")
 def get_download_url(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
     """
     :param registration_id:
@@ -61,7 +55,8 @@ def get_download_url(registration_id, storage_name, path: str = "", user: Pydant
     """
     return storages_controller.get_download_url(user, registration_id, storage_name, path)
 
-@router.post("/registrations/credentials/{registration_id}/storages/{storage_name}/upload")
+
+@router.post("/storages/{storage_name}/upload")
 def upload_file(
         registration_id,
         storage_name,
@@ -77,7 +72,7 @@ def upload_file(
     return storages_controller.upload(user, registration_id, storage_name, path, file)
 
 
-@router.delete("/registrations/credentials/{registration_id}/storages/{storage_name}")
+@router.delete("/storages/{storage_name}")
 def delete_key(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
     """
     :param registration_id:
@@ -88,7 +83,7 @@ def delete_key(registration_id, storage_name, path: str = "", user: PydanticUser
     return storages_controller.delete_key(user, registration_id, storage_name, path)
 
 
-@router.get("/registrations/credentials/{registration_id}/storages/{storage_name}/preview")
+@router.get("/storages/{storage_name}/preview")
 def preview(registration_id, storage_name, path: str = "", user: PydanticUser = Depends(get_current_user)):
     """
     :param registration_id:

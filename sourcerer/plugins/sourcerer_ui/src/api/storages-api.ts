@@ -18,16 +18,6 @@ import {
     GET_STORAGES_START,
     GET_STORAGES_SUCCESS
 } from "../redux/actions/storage";
-import {
-    ADD_REGISTERED_STORAGE_FAILED,
-    ADD_REGISTERED_STORAGE_START,
-    ADD_REGISTERED_STORAGE_SUCCESS, DELETE_REGISTERED_STORAGE_FAILED,
-    DELETE_REGISTERED_STORAGE_START,
-    DELETE_REGISTERED_STORAGE_SUCCESS,
-    GET_REGISTERED_STORAGES_FAILED,
-    GET_REGISTERED_STORAGES_START,
-    GET_REGISTERED_STORAGES_SUCCESS
-} from "../redux/actions/registered_storages";
 
 export class StoragesApi {
     listStorages = (dispatch: any, storages: any) => {
@@ -61,7 +51,7 @@ export class StoragesApi {
             params['prefix'] = search
         }
         const inlineParams = new URLSearchParams(params);
-        client.get(`/api/v1/registrations/credentials/${ registrationId }/storages/${ storageName }?` + inlineParams
+        client.get(`/api/v1/storages/${ storageName }?registration_id=${ registrationId }&` + inlineParams
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_CONTENT_SUCCESS,
@@ -82,7 +72,7 @@ export class StoragesApi {
     getStoragePermissions = (dispatch: any, registrationId: string, storageName: string) => {
         dispatch({type: GET_STORAGES_PERMISSIONS_START})
 
-        client.get(`/api/v1/registrations/credentials/${ registrationId }/storages/${ storageName }/permissions`
+        client.get(`/api/v1/storages/${ storageName }/permissions?registration_id=${ registrationId }`
         ).then((data) => {
             dispatch({
                 type: GET_STORAGES_PERMISSIONS_SUCCESS,
@@ -102,7 +92,7 @@ export class StoragesApi {
     getKeyDownloadUrl = (dispatch: any, registrationId: string, storageName: string, path: string) => {
         dispatch({type: GET_KEY_PREVIEW_START})
         const params = new URLSearchParams({path: path});
-        const url = `/api/v1/registrations/credentials/${ registrationId }/storages/${ storageName }/download_url?${ params }`
+        const url = `/api/v1/storages/${ storageName }/download_url?registration_id=${ registrationId }&${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
         request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
@@ -114,7 +104,7 @@ export class StoragesApi {
     uploadFile = (dispatch: any, registrationId: string, storageName: string, path: string, key: string, file: any) => {
         dispatch({type: GET_KEY_UPLOAD_START})
         const params = new URLSearchParams({path: path});
-        const url = `/api/v1/registrations/credentials/${ registrationId }/storages/${ storageName }/upload?${ params }`
+        const url = `/api/v1/storages/${ storageName }/upload?registration_id=${ registrationId }&${ params }`
         const request = new XMLHttpRequest();
         request.open('POST', url, false);  // `false` makes the request synchronous
         request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
@@ -134,7 +124,7 @@ export class StoragesApi {
     getKeyContent = (dispatch: any, registrationId: string, storageName: string, path: string) => {
         dispatch({type: GET_KEY_PREVIEW_START})
         const params = new URLSearchParams({path: path});
-        const url = `/api/v1/registrations/credentials/${ registrationId }/storages/${ storageName }/preview?${ params }`
+        const url = `/api/v1/storages/${ storageName }/preview?registration_id=${ registrationId }&${ params }`
         const request = new XMLHttpRequest();
         request.open('GET', url, false);  // `false` makes the request synchronous
         request.setRequestHeader('Authorization', "Bearer " + window.localStorage.getItem('sourcer_token'))
@@ -147,7 +137,7 @@ export class StoragesApi {
         let self = this
         dispatch({type: DELETE_KEY_START})
         const params = new URLSearchParams({path: path + key});
-        client.delete(`/api/v1/registrations/credentials/${ registrationId }/storages/${ storageName }?${ params }`
+        client.delete(`/api/v1/storages/${ storageName }?registration_id=${ registrationId }&${ params }`
         ).then((data) => {
             dispatch({
                 type: DELETE_KEY_SUCCESS,
