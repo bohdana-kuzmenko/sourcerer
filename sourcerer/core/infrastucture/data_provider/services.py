@@ -262,3 +262,7 @@ class BlobbyService(S3Base):
 
 class Conductor(BlobbyService):
     ENDPOINT_URL = "https://conductor.data.apple.com"
+
+    @classmethod
+    def kind(cls):
+        return DataProvidersEnum.conductor
