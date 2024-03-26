@@ -258,3 +258,7 @@ class BlobbyService(S3Base):
 
         blobby = session.client('s3', endpoint_url=self.blobby_endpoint, config=blobby_config)
         return blobby.generate_presigned_url('get_object', Params={'Bucket': storage, 'Key': key}, ExpiresIn=expiration)
+
+
+class Conductor(BlobbyService):
+    ENDPOINT_URL = "https://conductor.data.apple.com"

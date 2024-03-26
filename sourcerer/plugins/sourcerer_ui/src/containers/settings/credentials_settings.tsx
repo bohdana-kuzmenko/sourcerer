@@ -27,9 +27,10 @@ export default function CredentialsSettings() {
     const options = [
         {key: 'blobby', text: 'Blobby', value: 'BLOBBY'},
         {key: 'mcqueen', text: 'McQueen', value: 'MCQUEEN'},
+        {key: 'conductor', text: 'Conductor', value: 'CONDUCTOR'},
     ]
 
-    const S3_COMPATIBLE_BUCKETS = ['BLOBBY', 'MCQUEEN', 'APPLE_S3', 'S3']
+    const S3_COMPATIBLE_BUCKETS = ['BLOBBY', 'MCQUEEN', 'APPLE_S3', 'S3', 'CONDUCTOR']
     let saveCredentials = async () => {
         await settingsApi.addRegistration(dispatch, {
             provider: provider,
