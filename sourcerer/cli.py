@@ -19,30 +19,31 @@ def run_ui_build():
         )
 
 
-def run_with_ui():
+def run_with_ui(port):
     from sourcerer.plugins.sourcerer_ui.fast_api_app_extended import app
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 
-def run_server():
+def run_server(port):
     from sourcerer.frameworks.fastapi.app import app
     url_list = [{"path": route.path, "name": route.name} for route in app.routes]
     for i in url_list:
         print(i)
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=port)
 
 
 def main():
     parser = ArgumentParser(description='Sourcerer cli')
     parser.add_argument('--action', choices=['run', 'run-with-ui', 'build-ui'], default='run')
+    parser.add_argument('--port', type=int,  default=8080)
     args = vars(parser.parse_args())
     print(args)
     if args.get('action') == 'run':
-        run_server()
+        run_server(args.get('port'))
     if args.get('action') == 'build-ui':
         print(run_ui_build())
     if args.get('action') == 'run-with-ui':
-        print(run_with_ui())
+        print(run_with_ui(args.get('port')))
 
 
 if __name__ == "__main__":
