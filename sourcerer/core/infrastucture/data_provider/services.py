@@ -124,15 +124,13 @@ class S3Base(BaseDataProviderService):
 
 
 class McQueenService(S3Base):
-    ENDPOINT_URL = "https://store-030.blobstore.apple.com"
-    REGION = "store-030"
 
     def __init__(self, credentials):
-        aws_access_key_id, aws_secret_access_key, region = self.parse_credentials(
+        aws_access_key_id, aws_secret_access_key, region, endpoint_url = self.parse_credentials(
             credentials
         )
-        self.mcqueen_endpoint = self.ENDPOINT_URL
-        self.mcqueen_region = self.REGION
+        self.mcqueen_endpoint = endpoint_url
+        self.mcqueen_region = region
         self.aws_secret_access_key = aws_secret_access_key
         self.aws_access_key_id = aws_access_key_id
         self.session = boto3.Session(
@@ -142,9 +140,9 @@ class McQueenService(S3Base):
         )
         try:
             self._client = self.session.client(
-                "s3", endpoint_url=self.ENDPOINT_URL, region_name=region, verify=False)
+                "s3", endpoint_url=endpoint_url, region_name=region, verify=False)
             self._resource = self.session.resource(
-                "s3", endpoint_url=self.ENDPOINT_URL, region_name=region, verify=False
+                "s3", endpoint_url=endpoint_url, region_name=region, verify=False
             )
             self.client.meta.events.register('before-call.s3.ListObjects', add_xml_header)
 
@@ -172,7 +170,8 @@ class McQueenService(S3Base):
                 [
                     credentials.get("secret_access_key", ""),
                     credentials.get("access_key", ""),
-                    credentials.get("region", cls.REGION),
+                    credentials.get("region", ""),
+                    credentials.get("endpoint_url", ""),
                 ]
             ),
             owner_id=owner.id,
@@ -181,8 +180,8 @@ class McQueenService(S3Base):
         data_provider_credentials_service.create(source)
 
     def parse_credentials(self, credentials):
-        aws_secret_access_key, aws_access_key_id, region = credentials.split()
-        return aws_access_key_id, aws_secret_access_key, region
+        aws_secret_access_key, aws_access_key_id, region, endpoint_url = credentials.split()
+        return aws_access_key_id, aws_secret_access_key, region, endpoint_url
 
 
 class BlobbyService(S3Base):

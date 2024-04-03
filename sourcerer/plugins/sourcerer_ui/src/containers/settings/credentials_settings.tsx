@@ -135,6 +135,16 @@ export default function CredentialsSettings() {
                             label={ "Region" }
                             placeholder={ "Region" }
                         />
+                        
+                        <InputField
+                            condition={ ["MCQUEEN"].indexOf(provider) > -1 }
+                            onChange={ (event: any) => setFormData({
+                                ...formData,
+                                endpoint_url: event.target.value,
+                            }) }
+                            label={ "Endpoint Url" }
+                            placeholder={ "Endpoint Url" }
+                        />
                     </Form>
                 </Modal.Content>
                 <Modal.Actions>
