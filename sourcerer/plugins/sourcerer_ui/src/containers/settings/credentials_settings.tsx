@@ -69,7 +69,7 @@ export default function CredentialsSettings() {
                                         />
                                     </Table.Cell>
                                     <Table.Cell>{ creds.provider }</Table.Cell>
-                                    <Table.Cell>{ creds.credentials }</Table.Cell>
+                                    <Table.Cell>{ creds.credentials.split(' ')[0] }</Table.Cell>
                                     <Table.Cell>{ creds.created_at }</Table.Cell>
                                 </Table.Row>
                             )
