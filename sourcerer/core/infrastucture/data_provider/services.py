@@ -186,10 +186,12 @@ class McQueenService(S3Base):
 
 class BlobbyService(S3Base):
     ENDPOINT_URL = "https://blob.mr3.simcloud.apple.com"
+    PRESIGNED_ENDPOINT_URL = ENDPOINT_URL
 
     def __init__(self, credentials):
         aws_access_key_id, aws_secret_access_key = self.parse_credentials(credentials)
         self.blobby_endpoint = self.ENDPOINT_URL
+        self.blobby_presigned_endpoint = self.PRESIGNED_ENDPOINT_URL
         self.aws_secret_access_key = aws_secret_access_key
         self.aws_access_key_id = aws_access_key_id
         self.session = boto3.Session(
@@ -255,12 +257,13 @@ class BlobbyService(S3Base):
         session = self.generate_tmp_session(storage, key)
         blobby_config = Config(read_timeout=300)
 
-        blobby = session.client('s3', endpoint_url=self.blobby_endpoint, config=blobby_config)
+        blobby = session.client('s3', endpoint_url=self.blobby_presigned_endpoint, config=blobby_config)
         return blobby.generate_presigned_url('get_object', Params={'Bucket': storage, 'Key': key}, ExpiresIn=expiration)
 
 
 class Conductor(BlobbyService):
     ENDPOINT_URL = "https://conductor.data.apple.com"
+    PRESIGNED_ENDPOINT_URL = "https://web.conductor.data.apple.com"
 
     @classmethod
     def kind(cls):
