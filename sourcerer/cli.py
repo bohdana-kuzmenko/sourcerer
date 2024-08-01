@@ -35,6 +35,8 @@ def run_server(port):
 
 
 def main():
+    if not os.path.exists(DB_PATH):
+        os.makedirs(DB_PATH)
     parser = ArgumentParser(description='Sourcerer cli')
     parser.add_argument('--action', choices=['run', 'run-with-ui', 'build-ui'], default='run')
     parser.add_argument('--port', type=int,  default=8080)
@@ -49,6 +51,4 @@ def main():
 
 
 if __name__ == "__main__":
-    if not os.path.exists(DB_PATH):
-        os.makedirs(DB_PATH)
     main()
