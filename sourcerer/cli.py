@@ -6,6 +6,8 @@ from argparse import ArgumentParser
 import uvicorn
 
 
+DB_PATH = 'sourcererdb'
+
 def run_ui_build():
     npm_commands = [
         'npm install',
@@ -47,4 +49,6 @@ def main():
 
 
 if __name__ == "__main__":
+    if not os.path.exists(DB_PATH):
+        os.makedirs(DB_PATH)
     main()

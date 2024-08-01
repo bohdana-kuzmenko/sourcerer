@@ -12,8 +12,12 @@ class UsersService(BaseUsersService):
         user = user.dict()
         user['password'] = CryptoHasher.get_hash(user['password'])
         user = User(**user)
-        self.db.add(user)
-        self.db.commit()
+        try:
+            self.db.add(user)
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
         return PydanticUser.from_orm(user)
 
     def update(self):

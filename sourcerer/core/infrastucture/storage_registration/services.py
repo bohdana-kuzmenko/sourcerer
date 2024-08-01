@@ -20,8 +20,12 @@ class StorageRegistrationService(BaseStorageRegistrationService):
             name=storage.name,
             credentials_id=storage.credentials_id
         )
-        self.db.add(source)
-        self.db.commit()
+        try:
+            self.db.add(source)
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
 
     def delete(self, storage_id):
         storage = self.db.get(StorageRegistration, storage_id)

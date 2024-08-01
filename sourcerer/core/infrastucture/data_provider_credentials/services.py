@@ -33,8 +33,12 @@ class DataProviderCredentialsService(BaseDataProviderCredentialService):
         )
 
     def create(self, credentials):
-        self.db.add(credentials)
-        self.db.commit()
+        try:
+            self.db.add(credentials)
+            self.db.commit()
+        except Exception:
+            self.db.rollback()
+            raise
 
     def activate(self, registration):
         registration.active = True
